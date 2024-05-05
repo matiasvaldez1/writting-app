@@ -1,8 +1,5 @@
-export default async function Dashboard() {
-    return (
-      <div>
-        Your books
-      </ div>
-    );
-  }
-  
+import BooksSection from "@/sections/books/books";
+
+export default async function Books() {
+  return <BooksSection />;
+}

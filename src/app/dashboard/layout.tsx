@@ -34,7 +34,7 @@ export default function DashboardLayout({
           </Link>
         </div>
       </aside>
-      <div className="w-12/12">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   );
 }
