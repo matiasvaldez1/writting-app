@@ -11,9 +11,16 @@ export default async function Header() {
   return (
     <div className="flex justify-between p-12">
       <div>
-        <Link href={"/"}>
-          <Button variant="link">Writter app</Button>
-        </Link>
+        <SignedIn>
+          <Link href={"/dashboard"}>
+            <Button variant="link">Writter app</Button>
+          </Link>
+        </SignedIn>
+        <SignedOut>
+          <Link href={"/"}>
+            <Button variant="link">Writter app</Button>
+          </Link>
+        </SignedOut>
       </div>
       <div className="flex gap-8">
         <ModeToggle />

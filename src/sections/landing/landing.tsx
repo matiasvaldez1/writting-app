@@ -19,16 +19,33 @@ export default function LandingSection() {
       >
         <Card className="rounded-md">
           <CardContent className="grid grid-cols-2 bg-gray-800 rounded-md">
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl p-52">
-              Write, Organize, Publish: Your Complete Writing Companion!
-            </h1>
+            <div className="p-36 flex flex-col gap-6">
+              <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                Write, Organize, Publish: Your Complete Writing Companion!
+              </h1>
+              <p className="leading-7 text-xl mt-4">
+                Looking to unleash your creativity and bring your writing
+                projects to life? Look no further than our Writing App! With our
+                user-friendly platform, you can seamlessly organize all your writtings in one place.
+              </p>
+              <div className="flex justify-evenly p-10">
+                <Link href={"/sign-in"}>
+                  <Button size={"lg"}>Get started</Button>
+                </Link>
+                <a href={"#more"}>
+                  <Button size={"lg"} variant={"link"}>
+                    Read more
+                  </Button>
+                </a>
+              </div>
+            </div>
             <div className="p-20">
               <Image src={""} alt="Functionalities image" />
             </div>
           </CardContent>
         </Card>
       </motion.div>
-      <div className="h-1 my-40" />
+      <div id="more" className="h-1 my-40 scroll-smooth" />
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
