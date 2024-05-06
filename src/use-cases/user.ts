@@ -1,3 +1,5 @@
+'use server';
+
 import { getUserByClerkId } from "@/data-access/user";
 import { currentUser } from "@clerk/nextjs/server";
 

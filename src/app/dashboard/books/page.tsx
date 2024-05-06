@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createBookAction } from "@/app/_actions/books";
 import { useFormState, useFormStatus } from "react-dom";
-import { getUserByClerkIdUseCase } from "@/use-cases/user";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -27,8 +26,8 @@ function SubmitButton() {
 }
 
 export default function Books() {
+  const [amountOfChaptersIsKnown, setAmountOfChaptersIsKnown] = useState(false);
   const [error, action] = useFormState(createBookAction, {});
-  console.log("ERROR", error)
   return (
     <div>
       <div className="flex w-full justify-between">
@@ -46,7 +45,7 @@ export default function Books() {
                 </Label>
                 <Input id="bookName" name="bookName" type="text" />
                 {error?.bookName && (
-                  <span className="text-destructive">{error.bookName}</span>
+                  <span className="text-red-500">{error.bookName}</span>
                 )}
                 <Label htmlFor="bookDescription" className="text-base">
                   Book description
@@ -57,9 +56,7 @@ export default function Books() {
                   type="text"
                 />
                 {error?.bookDescription && (
-                  <span className="text-destructive">
-                    {error.bookDescription}
-                  </span>
+                  <span className="text-red-500">{error.bookDescription}</span>
                 )}
                 <Label htmlFor="amountOfChaptersIsKnown" className="text-base">
                   Do you know how many chapters will your book have? &nbsp;
@@ -67,15 +64,21 @@ export default function Books() {
                 <Checkbox
                   id="amountOfChaptersIsKnown"
                   name="amountOfChaptersIsKnown"
+                  onClick={() => setAmountOfChaptersIsKnown((prev) => !prev)}
                 />
-                <Label htmlFor="amountOfChapters" className="text-base">
-                  Amount of chapters
-                </Label>
-                <Input
-                  id="amountOfChapters"
-                  name="amountOfChapters"
-                  type="number"
-                />
+                {amountOfChaptersIsKnown && (
+                  <>
+                    <Label htmlFor="amountOfChapters" className="text-base">
+                      Amount of chapters
+                    </Label>
+                    <Input
+                      id="amountOfChapters"
+                      name="amountOfChapters"
+                      type="number"
+                      defaultValue={""}
+                    />
+                  </>
+                )}
                 <SubmitButton />
               </form>
             </DialogHeader>

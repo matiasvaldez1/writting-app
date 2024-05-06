@@ -9,7 +9,6 @@ export default clerkMiddleware(
     if (auth().userId && pathname === "/") {
       return Response.redirect(new URL("/dashboard", req.url));
     }
-    console.log(auth().userId, pathname);
   },
   { signInUrl: "/sign-in" }
 );
