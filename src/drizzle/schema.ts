@@ -4,15 +4,16 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  uuid,
 } from 'drizzle-orm/pg-core';
  
 export const UsersTable = pgTable(
   'users',
   {
     id: serial('id').primaryKey(),
+    clerkId: text('clerkId'),
     name: text('name').notNull(),
     email: text('email').notNull(),
-    image: text('image').notNull(),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
   },
   (users) => {
@@ -26,10 +27,10 @@ export const BoooksTable = pgTable(
   'books',
   {
     id: serial('id').primaryKey(),
-    userId: serial('id').references(() => UsersTable.id),
-    bookName: text('name').notNull(),
-    bookDescription: text('email').notNull(),
-    amountOfChapters: text('image'),
+    userId: serial('userId').references(() => UsersTable.id),
+    bookName: text('bookName').notNull(),
+    bookDescription: text('bookDescription').notNull(),
+    amountOfChapters: text('amountOfChapters'),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
   },
 );
