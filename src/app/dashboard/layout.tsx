@@ -1,8 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  HomeIcon,
-  ReaderIcon,
-} from "@radix-ui/react-icons";
+import { HomeIcon, ReaderIcon } from "@radix-ui/react-icons";
 import type { Metadata } from "next";
 import Link from "next/link";
 

@@ -5,6 +5,11 @@ const isProtectedRoute = createRouteMatcher(["/dashboard(.*)", "/books(.*)"]);
 export default clerkMiddleware(
   (auth, req) => {
     if (isProtectedRoute(req)) auth().protect();
+    const { pathname } = req.nextUrl;
+    if (auth().userId && pathname === "/") {
+      return Response.redirect(new URL("/dashboard", req.url));
+    }
+    console.log(auth().userId, pathname);
   },
   { signInUrl: "/sign-in" }
 );
