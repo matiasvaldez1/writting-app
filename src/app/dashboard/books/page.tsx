@@ -1,3 +1,5 @@
+"use client"
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -10,8 +12,23 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { createBookAction } from "@/app/_actions/books";
+import { useFormState, useFormStatus } from "react-dom";
+import { getUserByClerkIdUseCase } from "@/use-cases/user";
 
-export default async function Books() {
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending}>
+      {pending ? "Saving..." : "Save"}
+    </Button>
+  );
+}
+
+export default function Books() {
+  const [error, action] = useFormState(createBookAction, {});
+  console.log("ERROR", error)
   return (
     <div>
       <div className="flex w-full justify-between">
@@ -23,11 +40,14 @@ export default async function Books() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="my-5">Create book</DialogTitle>
-              <form className="flex flex-col gap-8 my-16">
+              <form action={action} className="flex flex-col gap-8 my-16">
                 <Label htmlFor="bookName" className="text-base">
                   Book name
                 </Label>
                 <Input id="bookName" name="bookName" type="text" />
+                {error?.bookName && (
+                  <span className="text-destructive">{error.bookName}</span>
+                )}
                 <Label htmlFor="bookDescription" className="text-base">
                   Book description
                 </Label>
@@ -36,6 +56,11 @@ export default async function Books() {
                   name="bookDescription"
                   type="text"
                 />
+                {error?.bookDescription && (
+                  <span className="text-destructive">
+                    {error.bookDescription}
+                  </span>
+                )}
                 <Label htmlFor="amountOfChaptersIsKnown" className="text-base">
                   Do you know how many chapters will your book have? &nbsp;
                 </Label>
@@ -49,9 +74,9 @@ export default async function Books() {
                 <Input
                   id="amountOfChapters"
                   name="amountOfChapters"
-                  type="text"
+                  type="number"
                 />
-                <Button type="submit">Create book</Button>
+                <SubmitButton />
               </form>
             </DialogHeader>
           </DialogContent>

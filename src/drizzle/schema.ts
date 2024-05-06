@@ -1,10 +1,10 @@
 import {
+  integer,
   pgTable,
   serial,
   text,
   timestamp,
   uniqueIndex,
-  uuid,
 } from 'drizzle-orm/pg-core';
  
 export const UsersTable = pgTable(
@@ -23,14 +23,14 @@ export const UsersTable = pgTable(
   },
 );
 
-export const BoooksTable = pgTable(
+export const BooksTable = pgTable(
   'books',
   {
     id: serial('id').primaryKey(),
     userId: serial('userId').references(() => UsersTable.id),
     bookName: text('bookName').notNull(),
     bookDescription: text('bookDescription').notNull(),
-    amountOfChapters: text('amountOfChapters'),
+    amountOfChapters: integer('amountOfChapters'),
     createdAt: timestamp('createdAt').defaultNow().notNull(),
   },
 );
