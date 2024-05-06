@@ -21,3 +21,15 @@ export const UsersTable = pgTable(
     };
   },
 );
+
+export const BoooksTable = pgTable(
+  'books',
+  {
+    id: serial('id').primaryKey(),
+    userId: serial('id').references(() => UsersTable.id),
+    bookName: text('name').notNull(),
+    bookDescription: text('email').notNull(),
+    amountOfChapters: text('image'),
+    createdAt: timestamp('createdAt').defaultNow().notNull(),
+  },
+);

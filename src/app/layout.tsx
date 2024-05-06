@@ -3,8 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/sections/header/header";
-import Footer from "@/sections/footer/footer";
+import Header from "@/app/_components/header";
+import Footer from "@/app/_components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
