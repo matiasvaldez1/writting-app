@@ -19,7 +19,7 @@ export default function LandingPage() {
       >
         <Card className="rounded-md">
           <CardContent className="grid grid-cols-1 xl:grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
-            <div className="p-28 flex flex-col gap-6">
+            <div className="p-24 flex flex-col gap-6">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Write, Organize, Publish: Your Complete Writing Companion!
               </h1>

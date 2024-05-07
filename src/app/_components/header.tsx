@@ -4,21 +4,32 @@ import { EMPTY_STRING } from "@/lib/constants";
 import { capitalizeUsername } from "@/lib/utils";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function Header() {
   const user = await currentUser();
   return (
-    <div className="flex justify-between p-12">
+    <div className="flex justify-between p-8">
       <div>
         <SignedIn>
           <Link href={"/dashboard"}>
-            <Button variant="link">Writter app</Button>
+            <Image
+              src={"/writter-app-logo.png"}
+              alt="Writter app logo"
+              width={200}
+              height={50}
+            />
           </Link>
         </SignedIn>
         <SignedOut>
           <Link href={"/"}>
-            <Button variant="link">Writter app</Button>
+            <Image
+              src={"/writter-app-logo.png"}
+              alt="Writter app logo"
+              width={200}
+              height={50}
+            />
           </Link>
         </SignedOut>
       </div>
