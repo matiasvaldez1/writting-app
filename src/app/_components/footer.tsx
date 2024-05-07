@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <div className="flex justify-between p-32">
+    <div className="flex flex-col text-center md:text-inherit md:flex-row md:justify-evenly p-32">
       <div className="flex flex-col gap-8">
         <Link href={"/"}>
           <Button variant="link">How it works</Button>

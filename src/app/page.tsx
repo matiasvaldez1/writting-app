@@ -18,7 +18,7 @@ export default function LandingPage() {
         transition={{ ease: "easeInOut" }}
       >
         <Card className="rounded-md">
-          <CardContent className="grid grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
+          <CardContent className="grid grid-cols-1 xl:grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
             <div className="p-28 flex flex-col gap-6">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Write, Organize, Publish: Your Complete Writing Companion!
@@ -54,7 +54,7 @@ export default function LandingPage() {
         transition={{ ease: "easeInOut" }}
       >
         <Card>
-          <CardContent className="grid grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
+          <CardContent className="grid grid-cols-1 xl:grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
             <p className="leading-7 p-20 text-xl">
               Looking to unleash your creativity and bring your writing projects
               to life? Look no further than our Writing App! With our
@@ -109,12 +109,12 @@ export default function LandingPage() {
       >
         <Card>
           <CardContent className="bg-transparent dark:bg-gray-800 rounded-md">
-            <div className="flex flex-col justify-center text-center p-24">
+            <div className="flex flex-col justify-center text-center md:p-24">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl min-h-16">
                 <RedoAnimText />
               </h1>
               <div>
-                <p className="leading-7 p-20 text-xl">
+                <p className="leading-7 p-8 md:p-20 text-xl">
                   Sign up to start using all the functionalities from our
                   writting app!
                 </p>
