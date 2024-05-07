@@ -18,8 +18,8 @@ export default function LandingPage() {
         transition={{ ease: "easeInOut" }}
       >
         <Card className="rounded-md">
-          <CardContent className="grid grid-cols-2 bg-gray-800 rounded-md">
-            <div className="p-36 flex flex-col gap-6">
+          <CardContent className="grid grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
+            <div className="p-28 flex flex-col gap-6">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Write, Organize, Publish: Your Complete Writing Companion!
               </h1>
@@ -46,7 +46,7 @@ export default function LandingPage() {
           </CardContent>
         </Card>
       </motion.div>
-      <div id="more" className="h-1 my-40 scroll-smooth" />
+      <div id="more" className="h-1 my-32 scroll-smooth" />
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -54,7 +54,7 @@ export default function LandingPage() {
         transition={{ ease: "easeInOut" }}
       >
         <Card>
-          <CardContent className="grid grid-cols-2 bg-gray-800 rounded-md">
+          <CardContent className="grid grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
             <p className="leading-7 p-20 text-xl">
               Looking to unleash your creativity and bring your writing projects
               to life? Look no further than our Writing App! With our
@@ -87,7 +87,7 @@ export default function LandingPage() {
           </CardContent>
         </Card>
       </motion.div>
-      <div className="h-1 my-40" />
+      <div className="h-1 my-32" />
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -108,7 +108,7 @@ export default function LandingPage() {
         transition={{ ease: "easeInOut" }}
       >
         <Card>
-          <CardContent className="bg-gray-800 rounded-md">
+          <CardContent className="bg-transparent dark:bg-gray-800 rounded-md">
             <div className="flex flex-col justify-center text-center p-24">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl min-h-16">
                 <RedoAnimText />
