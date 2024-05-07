@@ -1,90 +1,50 @@
-"use client";
+export const dynamic = "force-dynamic";
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { createBookAction } from "@/app/_actions/books";
-import { useFormState, useFormStatus } from "react-dom";
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { getUserBooks } from "@/app/_actions/books";
+import CreateBookDialog from "./_components/create-book-dialog";
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
+export default async function Books() {
+  const { books } = await getUserBooks();
 
-  return (
-    <Button type="submit" disabled={pending}>
-      {pending ? "Saving..." : "Save"}
-    </Button>
-  );
-}
-
-export default function Books() {
-  const [amountOfChaptersIsKnown, setAmountOfChaptersIsKnown] = useState(false);
-  const [error, action] = useFormState(createBookAction, {});
   return (
     <div>
       <div className="flex w-full justify-between">
         <h2 className="text-2xl">Your books</h2>
-        <Dialog>
-          <DialogTrigger className="border border-gray-800 rounded-md p-3">
-            Create new book
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="my-5">Create book</DialogTitle>
-              <form action={action} className="flex flex-col gap-8 my-16">
-                <Label htmlFor="bookName" className="text-base">
-                  Book name
-                </Label>
-                <Input id="bookName" name="bookName" type="text" />
-                {error?.bookName && (
-                  <span className="text-red-500">{error.bookName}</span>
-                )}
-                <Label htmlFor="bookDescription" className="text-base">
-                  Book description
-                </Label>
-                <Input
-                  id="bookDescription"
-                  name="bookDescription"
-                  type="text"
-                />
-                {error?.bookDescription && (
-                  <span className="text-red-500">{error.bookDescription}</span>
-                )}
-                <Label htmlFor="amountOfChaptersIsKnown" className="text-base">
-                  Do you know how many chapters will your book have? &nbsp;
-                </Label>
-                <Checkbox
-                  id="amountOfChaptersIsKnown"
-                  name="amountOfChaptersIsKnown"
-                  onClick={() => setAmountOfChaptersIsKnown((prev) => !prev)}
-                />
-                {amountOfChaptersIsKnown && (
-                  <>
-                    <Label htmlFor="amountOfChapters" className="text-base">
-                      Amount of chapters
-                    </Label>
-                    <Input
-                      id="amountOfChapters"
-                      name="amountOfChapters"
-                      type="number"
-                      defaultValue={""}
-                    />
-                  </>
-                )}
-                <SubmitButton />
-              </form>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        <CreateBookDialog />
       </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Book name</TableHead>
+            <TableHead>Book description</TableHead>
+            <TableHead>Amount of chapters</TableHead>
+            <TableHead className="text-right">Id</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {books.map((book) => (
+            <TableRow key={book.id}>
+              <TableCell className="font-medium">{book.bookName}</TableCell>
+              <TableCell className="font-medium">
+                {book.bookDescription}
+              </TableCell>
+              <TableCell className="font-medium">
+                {book.amountOfChapters}
+              </TableCell>
+              <TableCell className="font-medium">{book.id}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
