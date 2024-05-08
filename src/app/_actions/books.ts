@@ -18,7 +18,6 @@ export async function createBookAction(param: unknown, formData: FormData) {
   const result = createBookActionSchema.safeParse(
     Object.fromEntries(formData.entries())
   );
-
   if (!result.success) {
     return { ...result.error.formErrors.fieldErrors, status: "error" };
   }
@@ -40,9 +39,8 @@ export async function createBookAction(param: unknown, formData: FormData) {
 
 export async function deleteBookAction(bookId: number) {
   const bookDeleted = await deleteBookUseCase({ bookId });
-  if(bookDeleted) {
+  if (bookDeleted) {
     revalidatePath("/dashboard/books");
-    
   }
 }
 
