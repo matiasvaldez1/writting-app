@@ -39,6 +39,7 @@ export const ChaptersTable = pgTable("chapters", {
     .references(() => BooksTable.id),
   chapterNumber: integer("chapterNumber").notNull(),
   chapterTitle: text("chapterTitle").notNull(),
+  chapterDescription: text("chapterDescription").notNull(),
   chapterText: text("chapterText").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });

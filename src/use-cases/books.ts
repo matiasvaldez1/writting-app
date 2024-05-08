@@ -1,4 +1,9 @@
-import { createBook, deleteBook, getUserBooks } from "@/data-access/books";
+import {
+  createBook,
+  deleteBook,
+  getBookAndChapters,
+  getUserBooks,
+} from "@/data-access/books";
 import { booksZodType } from "@/types/types";
 
 export async function createBookUseCase({ values }: { values: booksZodType }) {
@@ -33,4 +38,17 @@ export async function getUserBooksUseCase({ userId }: { userId: number }) {
   const books = await getUserBooks({ userId });
 
   return books;
+}
+
+export async function getUserBookAndChaptersUseCase({
+  bookId,
+}: {
+  bookId: number;
+}) {
+  if (!bookId) {
+    throw new Error("No bookId attached");
+  }
+  const booksAndChapters = await getBookAndChapters({ bookId });
+
+  return booksAndChapters;
 }
