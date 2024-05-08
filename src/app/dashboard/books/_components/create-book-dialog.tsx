@@ -30,7 +30,7 @@ export default function CreateBookDialog() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [amountOfChaptersIsKnown, setAmountOfChaptersIsKnown] = useState(false);
-  const [state, action, success] = useFormState(createBookAction, {
+  const [state, action] = useFormState(createBookAction, {
     status: "",
   });
 

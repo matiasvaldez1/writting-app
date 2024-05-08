@@ -17,6 +17,15 @@ export async function createBook({ values }: { values: booksZodType }) {
   return bookAdded;
 }
 
+export async function deleteBook({ bookId }: { bookId: number }) {
+  const [bookDeleted] = await db
+    .delete(BooksTable)
+    .where(eq(BooksTable.id, bookId))
+    .returning();
+
+  return bookDeleted;
+}
+
 export async function getUserBooks({ userId }: { userId: number }) {
   const books = await db
     .select()

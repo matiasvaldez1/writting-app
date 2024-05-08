@@ -1,7 +1,11 @@
 "use server";
 
 import { booksZodSchema } from "@/types/zodSchemas";
-import { createBookUseCase, getUserBooksUseCase } from "@/use-cases/books";
+import {
+  createBookUseCase,
+  deleteBookUseCase,
+  getUserBooksUseCase,
+} from "@/use-cases/books";
 import { getUserByClerkIdUseCase } from "@/use-cases/user";
 import { revalidatePath } from "next/cache";
 import z from "zod";
@@ -34,11 +38,20 @@ export async function createBookAction(param: unknown, formData: FormData) {
   };
 }
 
+export async function deleteBookAction(bookId: number) {
+  const bookDeleted = await deleteBookUseCase({ bookId });
+  if(bookDeleted) {
+    revalidatePath("/dashboard/books");
+    
+  }
+}
+
 export async function getUserBooks() {
   const user = await getUserByClerkIdUseCase();
   const books = await getUserBooksUseCase({ userId: user.userId! });
 
   return {
+    status: "success",
     books,
   };
 }
