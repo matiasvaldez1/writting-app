@@ -5,6 +5,7 @@ import CreateBookDialog from "./_components/create-book-dialog";
 import BookImageByTheme from "./_components/book-image-by-theme";
 import PageHeading from "@/components/ui/page-header";
 import BookOptionsDropdown from "./_components/book-options-dropdown";
+import Link from "next/link";
 
 export default async function Books() {
   const { books } = await getUserBooks();
@@ -23,9 +24,11 @@ export default async function Books() {
                 <h2 className="text-xl">{book.bookName}</h2>
                 <BookOptionsDropdown bookId={book.id} />
               </div>
-              <div className="cursor-pointer">
-                <BookImageByTheme />
-              </div>
+              <Link href={`/dashboard/books/${book.id}/edit`}>
+                <div className="cursor-pointer">
+                  <BookImageByTheme />
+                </div>
+              </Link>
               <p className="font-medium">{book.bookDescription}</p>
               {Boolean(book.amountOfChapters) && (
                 <p className="font-medium">
