@@ -1,18 +1,15 @@
 "use client";
 
-import { updateChapterTextContent } from "@/app/_actions/books";
 import {
   CheckIcon,
   EnterFullScreenIcon,
   ExitFullScreenIcon,
 } from "@radix-ui/react-icons";
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { useRef, useState, useTransition } from "react";
+import { useState } from "react";
 import screenfull from "screenfull";
-import { LoadingSpinner } from "./loading";
+import { LoadingSpinner } from "@/components/ui/loading";
 
-const MenuBar = ({
+export default function MenuBar({
   editor,
   editorRef,
   saving,
@@ -20,7 +17,7 @@ const MenuBar = ({
   editor: any;
   editorRef: any;
   saving: boolean;
-}) => {
+}) {
   const [showIcon, setShowIcon] = useState(false);
 
   const toggleFullscreen = () => {
@@ -162,58 +159,4 @@ const MenuBar = ({
       </button>
     </div>
   );
-};
-
-const CustomTextEditor = ({
-  content,
-  chapterId,
-  bookId,
-}: {
-  content: string;
-  chapterId: number;
-  bookId: number;
-}) => {
-  const editor = useEditor({
-    extensions: [StarterKit],
-    content,
-    editorProps: {
-      attributes: {
-        class: "w-full h-[70svh]",
-        spellcheck: "false",
-      },
-    },
-    onUpdate: ({ editor }) => {
-      startTransition(() => {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(async () => {
-          setIsSaving(true);
-          try {
-            await updateChapterTextContent(
-              bookId,
-              chapterId,
-              editor?.getHTML() ?? ""
-            );
-          } catch (error) {
-            console.error("error", error);
-          } finally {
-            setIsSaving(false);
-          }
-        }, 2000);
-      });
-    },
-  });
-  const editorRef = useRef(null);
-
-  const timeoutRef = useRef<any>(null);
-  const [saving, setIsSaving] = useState(false);
-  const [isPending, startTransition] = useTransition();
-
-  return (
-    <div ref={editorRef} className="w-full">
-      <MenuBar saving={saving} editor={editor} editorRef={editorRef} />
-      <EditorContent content={content} editor={editor} />
-    </div>
-  );
-};
-
-export default CustomTextEditor;
+}

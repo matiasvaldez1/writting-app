@@ -1,6 +1,6 @@
 import { getUserBookAndChapter } from "@/app/_actions/books";
 import PageHeading from "@/components/ui/page-header";
-import Tiptap from "@/components/ui/custom-editor";
+import Tiptap from "@/app/dashboard/books/[id]/edit/[chapter_id]/editor/_components/custom-editor";
 
 export default async function EditChapter({
   params,
