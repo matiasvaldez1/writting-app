@@ -1,12 +1,26 @@
 "use client";
 
-import { EnterFullScreenIcon, ExitFullScreenIcon } from "@radix-ui/react-icons";
+import { updateChapterTextContent } from "@/app/_actions/books";
+import {
+  CheckIcon,
+  EnterFullScreenIcon,
+  ExitFullScreenIcon,
+} from "@radix-ui/react-icons";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import screenfull from "screenfull";
+import { LoadingSpinner } from "./loading";
 
-const MenuBar = ({ editor, editorRef }: { editor: any; editorRef: any }) => {
+const MenuBar = ({
+  editor,
+  editorRef,
+  saving,
+}: {
+  editor: any;
+  editorRef: any;
+  saving: boolean;
+}) => {
   const [showIcon, setShowIcon] = useState(false);
 
   const toggleFullscreen = () => {
@@ -132,6 +146,13 @@ const MenuBar = ({ editor, editorRef }: { editor: any; editorRef: any }) => {
       </button>
       <button onClick={() => editor.chain().focus().undo().run()}>undo</button>
       <button onClick={() => editor.chain().focus().redo().run()}>redo</button>
+      <div className="flex flex-col justify-center align-middle">
+        {saving ? (
+          <LoadingSpinner className="h-6 w-8" />
+        ) : (
+          <CheckIcon className="h-6 w-8" />
+        )}
+      </div>
       <button onClick={toggleFullscreen}>
         {showIcon ? (
           <ExitFullScreenIcon className="h-6 w-8" />
@@ -143,7 +164,15 @@ const MenuBar = ({ editor, editorRef }: { editor: any; editorRef: any }) => {
   );
 };
 
-const Tiptap = ({ content }: { content: string }) => {
+const CustomTextEditor = ({
+  content,
+  chapterId,
+  bookId,
+}: {
+  content: string;
+  chapterId: number;
+  bookId: number;
+}) => {
   const editor = useEditor({
     extensions: [StarterKit],
     content,
@@ -153,15 +182,38 @@ const Tiptap = ({ content }: { content: string }) => {
         spellcheck: "false",
       },
     },
+    onUpdate: ({ editor }) => {
+      startTransition(() => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(async () => {
+          setIsSaving(true);
+          try {
+            await updateChapterTextContent(
+              bookId,
+              chapterId,
+              editor?.getHTML() ?? ""
+            );
+          } catch (error) {
+            console.error("error", error);
+          } finally {
+            setIsSaving(false);
+          }
+        }, 2000);
+      });
+    },
   });
   const editorRef = useRef(null);
 
+  const timeoutRef = useRef<any>(null);
+  const [saving, setIsSaving] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
   return (
     <div ref={editorRef} className="w-full">
-      <MenuBar editor={editor} editorRef={editorRef} />
+      <MenuBar saving={saving} editor={editor} editorRef={editorRef} />
       <EditorContent content={content} editor={editor} />
     </div>
   );
 };
 
-export default Tiptap;
+export default CustomTextEditor;

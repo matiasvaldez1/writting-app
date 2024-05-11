@@ -7,6 +7,7 @@ import {
   getUserBookAndChapterUseCase,
   getUserBookAndChaptersUseCase,
   getUserBooksUseCase,
+  updateChapterTextContentUseCase,
 } from "@/use-cases/books";
 import { getUserByClerkIdUseCase } from "@/use-cases/user";
 import { revalidatePath } from "next/cache";
@@ -74,5 +75,22 @@ export async function getUserBookAndChapter(bookId: number, chapterId: number) {
   return {
     status: "success",
     bookAndChapter,
+  };
+}
+
+export async function updateChapterTextContent(
+  bookId: number,
+  chapterId: number,
+  newValue: string
+) {
+  const chapterUpdated = await updateChapterTextContentUseCase({
+    bookId,
+    chapterId,
+    newTextContent: newValue,
+  });
+
+  return {
+    status: "success",
+    chapterUpdated,
   };
 }

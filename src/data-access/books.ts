@@ -1,7 +1,7 @@
 import { db } from "@/drizzle/db";
 import { BooksTable, ChaptersTable } from "@/drizzle/schema";
 import { booksZodType } from "@/types/types";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export async function createBook({ values }: { values: booksZodType }) {
   const { userId, bookDescription, bookName, amountOfChapters } = values;
@@ -132,5 +132,30 @@ export async function getBookAndChapter({
   } catch (error) {
     console.error(error);
     throw new Error("There was an error getting the book and chapter");
+  }
+}
+
+export async function updateChapterField({
+  bookId,
+  chapterId,
+  newTextContent,
+}: {
+  bookId: number;
+  chapterId: number;
+  newTextContent: string;
+}) {
+  try {
+    const [updatedChapter] = await db
+      .update(ChaptersTable)
+      .set({ chapterText: newTextContent })
+      .where(
+        and(eq(ChaptersTable.bookId, bookId), eq(ChaptersTable.id, chapterId))
+      )
+      .returning();
+      
+    return updatedChapter;
+  } catch (error) {
+    console.error(error);
+    throw new Error("There was an error updating the chapter content");
   }
 }

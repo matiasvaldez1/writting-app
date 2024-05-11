@@ -1,6 +1,6 @@
 import { getUserBookAndChapter } from "@/app/_actions/books";
 import PageHeading from "@/components/ui/page-header";
-import Tiptap from "@/components/ui/tip-tap";
+import Tiptap from "@/components/ui/custom-editor";
 
 export default async function EditChapter({
   params,
@@ -8,9 +8,12 @@ export default async function EditChapter({
   params: { id: string; chapter_id: string };
 }) {
   const { id: bookId, chapter_id: chapterId } = params;
+  const integerBookId = Number(bookId);
+  const integerChapterId = Number(chapterId);
+
   const { bookAndChapter } = await getUserBookAndChapter(
-    Number(bookId),
-    Number(chapterId)
+    integerBookId,
+    integerChapterId
   );
 
   return (
@@ -20,7 +23,11 @@ export default async function EditChapter({
         ${bookAndChapter.chapter.chapterTitle}`}
       />
       <div className="my-8">
-        <Tiptap content={bookAndChapter.chapter.chapterText} />
+        <Tiptap
+          bookId={integerBookId}
+          chapterId={integerChapterId}
+          content={bookAndChapter.chapter.chapterText}
+        />
       </div>
     </div>
   );

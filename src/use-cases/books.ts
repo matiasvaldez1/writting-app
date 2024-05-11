@@ -4,6 +4,7 @@ import {
   getBookAndChapter,
   getBookAndChapters,
   getUserBooks,
+  updateChapterField,
 } from "@/data-access/books";
 import { booksZodType } from "@/types/types";
 
@@ -68,6 +69,33 @@ export async function getUserBookAndChapterUseCase({
     throw new Error("No chapterId attached");
   }
   const booksAndChapters = await getBookAndChapter({ bookId, chapterId });
+
+  return booksAndChapters;
+}
+
+export async function updateChapterTextContentUseCase({
+  bookId,
+  chapterId,
+  newTextContent,
+}: {
+  bookId: number;
+  chapterId: number;
+  newTextContent: string;
+}) {
+  if (!bookId) {
+    throw new Error("No bookId attached");
+  }
+  if (!chapterId) {
+    throw new Error("No chapterId attached");
+  }
+  if (!newTextContent) {
+    throw new Error("No newTextContent attached");
+  }
+  const booksAndChapters = await updateChapterField({
+    bookId,
+    chapterId,
+    newTextContent,
+  });
 
   return booksAndChapters;
 }
