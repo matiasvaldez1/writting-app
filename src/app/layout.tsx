@@ -33,7 +33,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Header />
-            <main>{children}</main>
+            <main className="min-h-[80svh]">{children}</main>
             <Footer />
             <Toaster />
           </ThemeProvider>

@@ -50,12 +50,17 @@ export async function createBook({ values }: { values: booksZodType }) {
 }
 
 export async function deleteBook({ bookId }: { bookId: number }) {
+  const [chaptersDeleted] = await db
+    .delete(ChaptersTable)
+    .where(eq(ChaptersTable.bookId, bookId))
+    .returning();
+
   const [bookDeleted] = await db
     .delete(BooksTable)
     .where(eq(BooksTable.id, bookId))
     .returning();
 
-  return bookDeleted;
+  return { ...bookDeleted, chaptersDeleted };
 }
 
 export async function getUserBooks({ userId }: { userId: number }) {

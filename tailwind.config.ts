@@ -18,6 +18,7 @@ const config = {
       },
     },
     extend: {
+      display: ["group-hover"],
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
