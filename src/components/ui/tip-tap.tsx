@@ -1,23 +1,33 @@
 "use client";
 
+import { EnterFullScreenIcon, ExitFullScreenIcon } from "@radix-ui/react-icons";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import screenfull from "screenfull";
 
 const MenuBar = ({ editor, editorRef }: { editor: any; editorRef: any }) => {
+  const [showIcon, setShowIcon] = useState(false);
+
   const toggleFullscreen = () => {
     if (screenfull.isEnabled) {
       screenfull.request(editorRef.current);
     }
+    if (screenfull.isFullscreen) {
+      screenfull.exit();
+    }
   };
+
+  screenfull.onchange((e) => {
+    setShowIcon(screenfull.isFullscreen);
+  });
+
   if (!editor) {
     return null;
   }
 
   return (
     <div className="flex gap-8">
-      <button onClick={toggleFullscreen}>Enter full screen</button>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={editor.isActive("bold") ? "is-active" : ""}
@@ -122,6 +132,13 @@ const MenuBar = ({ editor, editorRef }: { editor: any; editorRef: any }) => {
       </button>
       <button onClick={() => editor.chain().focus().undo().run()}>undo</button>
       <button onClick={() => editor.chain().focus().redo().run()}>redo</button>
+      <button onClick={toggleFullscreen}>
+        {showIcon ? (
+          <ExitFullScreenIcon className="h-6 w-8" />
+        ) : (
+          <EnterFullScreenIcon className="h-6 w-8" />
+        )}
+      </button>
     </div>
   );
 };
