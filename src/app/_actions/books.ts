@@ -7,6 +7,7 @@ import {
   getUserBookAndChapterUseCase,
   getUserBookAndChaptersUseCase,
   getUserBooksUseCase,
+  updateChapterDescriptionUseCase,
   updateChapterTextContentUseCase,
 } from "@/use-cases/books";
 import { getUserByClerkIdUseCase } from "@/use-cases/user";
@@ -88,6 +89,43 @@ export async function updateChapterTextContent(
     chapterId,
     newTextContent: newValue,
   });
+
+  return {
+    status: "success",
+    chapterUpdated,
+  };
+}
+
+export async function updateChapterTitle(
+  bookId: number,
+  chapterId: number,
+  newValue: string
+) {
+  const chapterUpdated = await updateChapterTextContentUseCase({
+    bookId,
+    chapterId,
+    newTextContent: newValue,
+  });
+
+  revalidatePath(`/dashboard/books/${bookId}/edit`);
+
+  return {
+    status: "success",
+    chapterUpdated,
+  };
+}
+export async function updateChapterDescription(
+  bookId: number,
+  chapterId: number,
+  newValue: string
+) {
+  const chapterUpdated = await updateChapterDescriptionUseCase({
+    bookId,
+    chapterId,
+    newTextContent: newValue,
+  });
+
+  revalidatePath(`/dashboard/books/${bookId}/edit`);
 
   return {
     status: "success",

@@ -67,7 +67,8 @@ export async function getUserBooks({ userId }: { userId: number }) {
   const books = await db
     .select()
     .from(BooksTable)
-    .where(eq(BooksTable.userId, userId));
+    .where(eq(BooksTable.userId, userId))
+    .orderBy(BooksTable.createdAt);
 
   return books;
 }
@@ -91,7 +92,8 @@ export async function getBookAndChapters({ bookId }: { bookId: number }) {
         chapterDescription: ChaptersTable.chapterDescription,
       })
       .from(ChaptersTable)
-      .where(eq(ChaptersTable.bookId, bookId));
+      .where(eq(ChaptersTable.bookId, bookId))
+      .orderBy(ChaptersTable.chapterNumber);
 
     const bookAndChapters = { ...books, chapters };
     return bookAndChapters;
@@ -148,6 +150,55 @@ export async function updateChapterField({
     const [updatedChapter] = await db
       .update(ChaptersTable)
       .set({ chapterText: newTextContent })
+      .where(
+        and(eq(ChaptersTable.bookId, bookId), eq(ChaptersTable.id, chapterId))
+      )
+      .returning();
+
+    return updatedChapter;
+  } catch (error) {
+    console.error(error);
+    throw new Error("There was an error updating the chapter content");
+  }
+}
+
+export async function updateChapterDescription({
+  bookId,
+  chapterId,
+  newTextContent,
+}: {
+  bookId: number;
+  chapterId: number;
+  newTextContent: string;
+}) {
+  try {
+    const [updatedChapter] = await db
+      .update(ChaptersTable)
+      .set({ chapterDescription: newTextContent })
+      .where(
+        and(eq(ChaptersTable.bookId, bookId), eq(ChaptersTable.id, chapterId))
+      )
+      .returning();
+
+    return updatedChapter;
+  } catch (error) {
+    console.error(error);
+    throw new Error("There was an error updating the chapter content");
+  }
+}
+export async function updateChapterTitle({
+  bookId,
+  chapterId,
+  newTextContent,
+}: {
+  bookId: number;
+  chapterId: number;
+  newTextContent: string;
+}) {
+  try {
+    const [updatedChapter] = await db
+      .update(ChaptersTable)
+      .set({ chapterTitle: newTextContent })
       .where(
         and(eq(ChaptersTable.bookId, bookId), eq(ChaptersTable.id, chapterId))
       )
