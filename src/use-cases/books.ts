@@ -1,6 +1,7 @@
 import {
   createBook,
   deleteBook,
+  getBookAndChapter,
   getBookAndChapters,
   getUserBooks,
 } from "@/data-access/books";
@@ -49,6 +50,24 @@ export async function getUserBookAndChaptersUseCase({
     throw new Error("No bookId attached");
   }
   const booksAndChapters = await getBookAndChapters({ bookId });
+
+  return booksAndChapters;
+}
+
+export async function getUserBookAndChapterUseCase({
+  bookId,
+  chapterId,
+}: {
+  bookId: number;
+  chapterId: number;
+}) {
+  if (!bookId) {
+    throw new Error("No bookId attached");
+  }
+  if (!chapterId) {
+    throw new Error("No chapterId attached");
+  }
+  const booksAndChapters = await getBookAndChapter({ bookId, chapterId });
 
   return booksAndChapters;
 }

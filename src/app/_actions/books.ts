@@ -4,6 +4,7 @@ import { booksZodSchema } from "@/types/zodSchemas";
 import {
   createBookUseCase,
   deleteBookUseCase,
+  getUserBookAndChapterUseCase,
   getUserBookAndChaptersUseCase,
   getUserBooksUseCase,
 } from "@/use-cases/books";
@@ -61,5 +62,17 @@ export async function getUserBookAndChapters(bookId: number) {
   return {
     status: "success",
     bookAndChapters,
+  };
+}
+
+export async function getUserBookAndChapter(bookId: number, chapterId: number) {
+  const bookAndChapter = await getUserBookAndChapterUseCase({
+    bookId,
+    chapterId,
+  });
+
+  return {
+    status: "success",
+    bookAndChapter,
   };
 }

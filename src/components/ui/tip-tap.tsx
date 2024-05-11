@@ -2,14 +2,22 @@
 
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useRef } from "react";
+import screenfull from "screenfull";
 
-const MenuBar = ({ editor }: { editor: any }) => {
+const MenuBar = ({ editor, editorRef }: { editor: any; editorRef: any }) => {
+  const toggleFullscreen = () => {
+    if (screenfull.isEnabled) {
+      screenfull.request(editorRef.current);
+    }
+  };
   if (!editor) {
     return null;
   }
 
   return (
     <div className="flex gap-8">
+      <button onClick={toggleFullscreen}>Enter full screen</button>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={editor.isActive("bold") ? "is-active" : ""}
@@ -124,15 +132,17 @@ const Tiptap = ({ content }: { content: string }) => {
     content,
     editorProps: {
       attributes: {
+        class: "w-full h-[70svh]",
         spellcheck: "false",
       },
     },
   });
+  const editorRef = useRef(null);
 
   return (
-    <div>
-      <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+    <div ref={editorRef} className="w-full">
+      <MenuBar editor={editor} editorRef={editorRef} />
+      <EditorContent content={content} editor={editor} />
     </div>
   );
 };

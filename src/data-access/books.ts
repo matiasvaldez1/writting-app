@@ -97,6 +97,40 @@ export async function getBookAndChapters({ bookId }: { bookId: number }) {
     return bookAndChapters;
   } catch (error) {
     console.error(error);
-    throw new Error("There was an error getting the books");
+    throw new Error("There was an error getting the book and chapters");
+  }
+}
+
+export async function getBookAndChapter({
+  bookId,
+  chapterId,
+}: {
+  bookId: number;
+  chapterId: number;
+}) {
+  try {
+    const [book] = await db
+      .select({
+        bookName: BooksTable.bookName,
+      })
+      .from(BooksTable)
+      .where(eq(BooksTable.id, bookId));
+
+    const [chapter] = await db
+      .select({
+        id: ChaptersTable.id,
+        chapterTitle: ChaptersTable.chapterTitle,
+        chapterNumber: ChaptersTable.chapterNumber,
+        chapterDescription: ChaptersTable.chapterDescription,
+        chapterText: ChaptersTable.chapterText,
+      })
+      .from(ChaptersTable)
+      .where(eq(ChaptersTable.id, chapterId));
+
+    const bookAndChapter = { ...book, chapter: chapter };
+    return bookAndChapter;
+  } catch (error) {
+    console.error(error);
+    throw new Error("There was an error getting the book and chapter");
   }
 }
