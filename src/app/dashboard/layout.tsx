@@ -10,22 +10,32 @@ import {
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/loading";
+import { usePathname } from "next/navigation";
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const pathname = usePathname();
+  const defaulClosedPath = pathname.includes("editor");
   const [hasMounted, setHasMounted] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(
+    defaulClosedPath ? false : true
+  );
 
   useEffect(() => {
+    if (defaulClosedPath) {
+      setHasMounted(true);
+      setIsSidebarOpen(defaulClosedPath ? false : true);
+      return;
+    }
     const storedValue = localStorage.getItem("sidebarOpen");
     if (storedValue !== null) {
       setIsSidebarOpen(JSON.parse(storedValue));
     }
     setHasMounted(true);
-  }, []);
+  }, [defaulClosedPath]);
 
   useEffect(() => {
     if (hasMounted) {
