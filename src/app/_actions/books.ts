@@ -9,6 +9,7 @@ import {
   getUserBooksUseCase,
   updateChapterDescriptionUseCase,
   updateChapterTextContentUseCase,
+  updateChapterTitleUseCase,
 } from "@/use-cases/books";
 import { getUserByClerkIdUseCase } from "@/use-cases/user";
 import { revalidatePath } from "next/cache";
@@ -101,7 +102,7 @@ export async function updateChapterTitle(
   chapterId: number,
   newValue: string
 ) {
-  const chapterUpdated = await updateChapterTextContentUseCase({
+  const chapterUpdated = await updateChapterTitleUseCase({
     bookId,
     chapterId,
     newTextContent: newValue,

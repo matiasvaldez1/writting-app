@@ -4,6 +4,7 @@ import {
   getBookAndChapter,
   getBookAndChapters,
   getUserBooks,
+  swapChapterNumber,
   updateChapterDescription,
   updateChapterField,
   updateChapterTitle,
@@ -149,6 +150,33 @@ export async function updateChapterDescriptionUseCase({
     bookId,
     chapterId,
     newTextContent,
+  });
+
+  return updatedChapter;
+}
+
+export async function swapChaptersUseCase({
+  bookId,
+  chapterNumber,
+  destinationChapterNumber,
+}: {
+  bookId: number;
+  chapterNumber: number;
+  destinationChapterNumber: number;
+}) {
+  if (!bookId) {
+    throw new Error("No bookId attached");
+  }
+  if (!chapterNumber) {
+    throw new Error("No chapterNumber attached");
+  }
+  if (!destinationChapterNumber) {
+    throw new Error("No destinationChapterNumber attached");
+  }
+  const updatedChapter = await swapChapterNumber({
+    bookId,
+    chapterNumber,
+    destinationChapterNumber,
   });
 
   return updatedChapter;

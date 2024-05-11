@@ -40,15 +40,14 @@ function EditableChaptersFields({
     startTransition(async () => {
       try {
         await updateChapterTitle(bookId, Number(chapter.id), title);
+        toast({
+          title: "Chapter title updated",
+        });
       } catch (error: any) {
         console.error("error", error);
         toast({
           title: "Chapter title not updated",
           description: error?.message ?? "",
-        });
-      } finally {
-        toast({
-          title: "Chapter title updated",
         });
       }
     });

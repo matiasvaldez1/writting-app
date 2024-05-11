@@ -203,10 +203,49 @@ export async function updateChapterTitle({
         and(eq(ChaptersTable.bookId, bookId), eq(ChaptersTable.id, chapterId))
       )
       .returning();
-      
+
     return updatedChapter;
   } catch (error) {
     console.error(error);
     throw new Error("There was an error updating the chapter content");
+  }
+}
+
+export async function swapChapterNumber({
+  bookId,
+  chapterNumber,
+  destinationChapterNumber,
+}: {
+  bookId: number;
+  chapterNumber: number;
+  destinationChapterNumber: number;
+}) {
+  try {
+    const [sourceChapter] = await db
+      .update(ChaptersTable)
+      .set({ chapterNumber: chapterNumber })
+      .where(
+        and(
+          eq(ChaptersTable.bookId, bookId),
+          eq(ChaptersTable.chapterNumber, chapterNumber)
+        )
+      )
+      .returning();
+
+    const [destinationChapter] = await db
+      .update(ChaptersTable)
+      .set({ chapterNumber: chapterNumber })
+      .where(
+        and(
+          eq(ChaptersTable.bookId, bookId),
+          eq(ChaptersTable.chapterNumber, destinationChapterNumber)
+        )
+      )
+      .returning();
+
+    return { sourceChapter, destinationChapter };
+  } catch (error) {
+    console.error(error);
+    throw new Error("There was an error updating the chapter numbers");
   }
 }
