@@ -15,7 +15,7 @@ export default async function EditBook({ params }: { params: { id: string } }) {
             className="flex justify-between border border-gray-100 p-5 rounded"
             key={chapter.id}
           >
-            <Link href={`/dashboard/books/${params.id}/edit/editor`}>
+            <Link href={`/dashboard/books/${params.id}/edit/${chapter.id}/editor`}>
               <div className="flex flex-col justify-evenly cursor-pointer">
                 <h2>{chapter.chapterTitle}</h2>
                 <h2>{chapter.chapterDescription}</h2>
