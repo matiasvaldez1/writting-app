@@ -76,21 +76,12 @@ export async function getUserBooks({ userId }: { userId: number }) {
 export async function getBookAndChapters({ bookId }: { bookId: number }) {
   try {
     const [books] = await db
-      .select({
-        bookName: BooksTable.bookName,
-        bookDescription: BooksTable.bookDescription,
-        amountOfChapters: BooksTable.amountOfChapters,
-      })
+      .select()
       .from(BooksTable)
       .where(eq(BooksTable.id, bookId));
 
     const chapters = await db
-      .select({
-        id: ChaptersTable.id,
-        chapterTitle: ChaptersTable.chapterTitle,
-        chapterNumber: ChaptersTable.chapterNumber,
-        chapterDescription: ChaptersTable.chapterDescription,
-      })
+      .select()
       .from(ChaptersTable)
       .where(eq(ChaptersTable.bookId, bookId))
       .orderBy(ChaptersTable.chapterNumber);
