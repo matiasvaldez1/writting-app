@@ -32,7 +32,7 @@ export default function RedoAnimText() {
           repeat: undefined,
           repeatType: "reverse",
           repeatDelay: 1,
-          delay: 1,
+          delay: 0.2,
           onUpdate(latest) {
             if (updatedThisRound.get() === true && latest > 0) {
               updatedThisRound.set(false);

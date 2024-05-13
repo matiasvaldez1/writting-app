@@ -1,29 +1,27 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import RedoAnimText from "./_components/anim-writting-text";
 
 export default function LandingPage() {
   return (
-    <div className="p-12">
+    <div className="pt-0 pr-10 pb-0 pl-10">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ ease: "easeInOut" }}
       >
-        <Card className="rounded-md">
-          <CardContent className="grid grid-cols-1 xl:grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
-            <div className="p-24 flex flex-col gap-6">
+        <div className="rounded-md">
+          <div className="grid grid-cols-1 2xl:grid-cols-2 rounded-md">
+            <div className="p-10 2xl:p-24 flex flex-col gap-10 2xl:gap-6">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
                 Write, Organize, Publish: Your Complete Writing Companion!
               </h1>
-              <p className="leading-7 text-xl mt-4">
+              <p className="leading-7 text-sm xl:text-xl mt-4">
                 Looking to unleash your creativity and bring your writing
                 projects to life? Look no further than our Writing App! With our
                 user-friendly platform, you can seamlessly organize all your
@@ -40,11 +38,14 @@ export default function LandingPage() {
                 </a>
               </div>
             </div>
-            <div className="p-20">
-              <Image src={""} alt="Functionalities image" />
+            <div className="p-10">
+              <video width={"100%"} height={"100%"} autoPlay muted>
+                <source src="/demo-video.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </motion.div>
       <div id="more" className="h-1 my-32 scroll-smooth" />
       <motion.div
@@ -53,8 +54,8 @@ export default function LandingPage() {
         viewport={{ once: true }}
         transition={{ ease: "easeInOut" }}
       >
-        <Card>
-          <CardContent className="grid grid-cols-1 xl:grid-cols-2 bg-transparent dark:bg-gray-800 rounded-md">
+        <div>
+          <div className="grid grid-cols-1 xl:grid-cols-2 rounded-md">
             <p className="leading-7 p-20 text-xl">
               Looking to unleash your creativity and bring your writing projects
               to life? Look no further than our Writing App! With our
@@ -84,8 +85,8 @@ export default function LandingPage() {
               the power of our Writing App and take your storytelling to new
               heights today!
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </motion.div>
       <div className="h-1 my-32" />
       <motion.div
@@ -107,8 +108,8 @@ export default function LandingPage() {
         viewport={{ once: true }}
         transition={{ ease: "easeInOut" }}
       >
-        <Card>
-          <CardContent className="bg-transparent dark:bg-gray-800 rounded-md">
+        <div>
+          <div className="rounded-md">
             <div className="flex flex-col justify-center text-center md:p-24">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl min-h-16">
                 <RedoAnimText />
@@ -133,8 +134,8 @@ export default function LandingPage() {
                 </Link>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </motion.div>
     </div>
   );
