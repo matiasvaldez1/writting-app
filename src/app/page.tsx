@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
 import RedoAnimText from "./_components/anim-writting-text";
+import FeaturesSection from "./_components/features-section";
 
 export default function LandingPage() {
   return (
@@ -48,52 +49,31 @@ export default function LandingPage() {
         </div>
       </motion.div>
       <div id="more" className="h-1 my-32 scroll-smooth" />
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ ease: "easeInOut" }}
-      >
-        <div>
-          <div className="grid grid-cols-1 xl:grid-cols-2 rounded-md">
-            <p className="leading-7 p-20 text-xl">
-              Looking to unleash your creativity and bring your writing projects
-              to life? Look no further than our Writing App! With our
-              user-friendly platform, you can seamlessly organize your thoughts,
-              craft compelling stories, and effortlessly structure your
-              narrative. Gone are the days of juggling multiple documents or
-              struggling to keep track of your ideas. Our app empowers you to
-              create books, divide them into chapters, and arrange them in the
-              perfect order, all within one convenient interface. Whether
-              you&apos;re a seasoned author or just starting your writing
-              journey, our app provides the tools you need to streamline your
-              process and turn your ideas into polished manuscripts. Say goodbye
-              to writer&apos;s block and hello to a world of limitless
-              storytelling possibilities with our Writing App.
-            </p>
-            <p className="leading-7 p-20 text-xl">
-              Don&apos;t let the fear of a blank page hold you back any longer.
-              Our Writing App is designed to kickstart your creativity and keep
-              it flowing. With features like customizable templates, character
-              and plot development tools, and easy-to-use editing functions,
-              you&apos;ll find yourself inspired to write like never before.
-              Plus, our cloud-based platform ensures that your work is always
-              accessible, whether you&apos;re at home, in the office, or on the
-              go. And with seamless integration with popular publishing
-              platforms, sharing your masterpiece with the world has never been
-              easier. Join the thousands of writers who have already discovered
-              the power of our Writing App and take your storytelling to new
-              heights today!
-            </p>
-          </div>
-        </div>
-      </motion.div>
+      <div className="p-10 2xl:p-20 flex flex-col gap-20">
+        <FeaturesSection
+          reversed={false}
+          image="edit-your-book-content-demo.png"
+          title="Edit Your Book"
+          text="You will be able to edit your book with a bunch of different options in our built in - easy to use text editor."
+        />
+        <FeaturesSection
+          reversed={true}
+          image="managing-chapters-demo.jpg"
+          title="Manage Chapters"
+          text="You can easily manage the order of your books by just dragging them around changing their order, renaming their titles or descriptions."
+        />
+        <FeaturesSection
+          reversed={false}
+          image="export-as-pdf-result-demo.jpg"
+          title="Export as PDF"
+          text="When you finish writting your book you can click on the Generate Pdf section and this will generate a downloadable PDF for you to easily visualize your draft."
+        />
+      </div>
       <div className="h-1 my-32" />
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: false }}
-        transition={{ delay: 0.5 }}
         className="flex justify-center my-6"
       >
         <blockquote className="mt-6 border-l-2 pl-6 italic">
