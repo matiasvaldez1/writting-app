@@ -11,6 +11,7 @@ import {
 import { deleteBookAction } from "@/app/_actions/books";
 import { useToast } from "@/components/ui/use-toast";
 import { useTransition } from "react";
+import Link from "next/link";
 
 export default function BookOptionsDropdown({ bookId }: { bookId: number }) {
   const [, startTransition] = useTransition();
@@ -21,7 +22,9 @@ export default function BookOptionsDropdown({ bookId }: { bookId: number }) {
         <DotsHorizontalIcon className="h-8 w-8" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+        <Link href={`/dashboard/books/${bookId}/edit`}>
+          <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer text-red-500"

@@ -5,13 +5,11 @@ import { revalidatePath } from "next/cache";
 
 export async function swapChaptersAction(
   bookId: number,
-  chapterNumber: number,
-  destinationChapterNumber: number
+  idsOfNewOrder: number[]
 ) {
   const chaptersUpdated = await swapChaptersUseCase({
     bookId,
-    chapterNumber,
-    destinationChapterNumber,
+    idsOfNewOrder
   });
 
   revalidatePath(`/dashboard/books/${bookId}/edit`);

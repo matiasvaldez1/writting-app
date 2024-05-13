@@ -6,7 +6,7 @@ import Link from "next/link";
 import { DragHandleDots1Icon } from "@radix-ui/react-icons";
 import { AsyncReturnType } from "@/types/types";
 import { Draggable, Droppable, DragDropContext } from "@hello-pangea/dnd";
-import { useTransition } from "react";
+import { useOptimistic, useTransition } from "react";
 import { swapChaptersAction } from "@/app/_actions/chapters";
 
 export default function ChaptersList({
@@ -19,17 +19,51 @@ export default function ChaptersList({
   bookId: number;
 }) {
   const [, startTransition] = useTransition();
+  const [optimisticState, swapOptimistic] = useOptimistic(
+    bookAndChapters.chapters,
+    (
+      state,
+      {
+        sourceChapterNumber,
+        destinationChapterNumber,
+      }: { sourceChapterNumber: number; destinationChapterNumber: number }
+    ) => {
+      const sourceChapterNumberIndex = state.findIndex(
+        (chapter) => chapter.chapterNumber === sourceChapterNumber
+      );
+      const destinationChapterNumberIndex = state.findIndex(
+        (chapter) => chapter.chapterNumber === destinationChapterNumber
+      );
+      const newState = [...state];
+      newState[sourceChapterNumberIndex] = state[destinationChapterNumberIndex];
+      newState[destinationChapterNumberIndex] = state[sourceChapterNumberIndex];
+
+      return newState;
+    }
+  );
 
   const onDragEnd = async (result: any) => {
-    const sourceChapterId = result.draggableId;
-    const destinationChapterId =
+    const sourceChapterNumber = Number(result.draggableId);
+    const destinationChapterNumber =
       bookAndChapters.chapters[result.destination.index as any].chapterNumber;
+
+    const sourceChapterNumberIndex = optimisticState.findIndex(
+      (chapter) => chapter.chapterNumber === sourceChapterNumber
+    );
+    const destinationChapterNumberIndex = optimisticState.findIndex(
+      (chapter) => chapter.chapterNumber === destinationChapterNumber
+    );
+    const newState = [...optimisticState];
+    newState[sourceChapterNumberIndex] =
+      optimisticState[destinationChapterNumberIndex];
+    newState[destinationChapterNumberIndex] =
+      optimisticState[sourceChapterNumberIndex];
+
+    const idsOfNewOrder = newState.map((chapter) => chapter.id);
+
+    swapOptimistic({ sourceChapterNumber, destinationChapterNumber });
     startTransition(async () => {
-      await swapChaptersAction(
-        bookId,
-        Number(sourceChapterId),
-        destinationChapterId
-      );
+      await swapChaptersAction(bookId, idsOfNewOrder);
     });
   };
 
@@ -41,13 +75,13 @@ export default function ChaptersList({
             <ul
               ref={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4 "
+              className="grid grid-cols-1 gap-4 "
             >
-              {bookAndChapters.chapters.map((chapter, idx) => (
+              {optimisticState.map((chapter, idx) => (
                 <Draggable
                   index={idx}
                   key={chapter.id}
-                  draggableId={String(chapter.chapterNumber)}
+                  draggableId={String(chapter?.chapterNumber)}
                 >
                   {(provided) => (
                     <li ref={provided.innerRef} {...provided.draggableProps}>
@@ -75,33 +109,3 @@ export default function ChaptersList({
     </DragDropContext>
   );
 }
-
-
-/* 
- const [optimisticState, swapOptimistic] = useOptimistic(
-    bookAndChapters.chapters,
-    (
-      state,
-      {
-        sourceChapterNumber,
-        destinationChapterNumber,
-      }: { sourceChapterNumber: number; destinationChapterNumber: number }
-    ) => {
-      const sourceChapterNumberIndex = state.findIndex(
-        (chapter) => chapter.chapterNumber === sourceChapterNumber
-      );
-      const destinationChapterNumberIndex = state.findIndex(
-        (chapter) => chapter.chapterNumber === destinationChapterNumber
-      );
-      const newState = [...state];
-      console.log(
-        state[destinationChapterNumberIndex], 
-        state[sourceChapterNumberIndex]
-      );
-      newState[sourceChapterNumberIndex] = state[destinationChapterNumberIndex];
-      newState[destinationChapterNumberIndex] = state[sourceChapterNumberIndex];
-      console.log("STATE AFTER", newState);
-
-      return newState;
-    }
-  ); */

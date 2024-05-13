@@ -157,26 +157,20 @@ export async function updateChapterDescriptionUseCase({
 
 export async function swapChaptersUseCase({
   bookId,
-  chapterNumber,
-  destinationChapterNumber,
+  idsOfNewOrder,
 }: {
   bookId: number;
-  chapterNumber: number;
-  destinationChapterNumber: number;
+  idsOfNewOrder: number[];
 }) {
   if (!bookId) {
     throw new Error("No bookId attached");
   }
-  if (!chapterNumber) {
-    throw new Error("No chapterNumber attached");
-  }
-  if (!destinationChapterNumber) {
-    throw new Error("No destinationChapterNumber attached");
+  if (!idsOfNewOrder) {
+    throw new Error("No idsOfNewOrder attached");
   }
   const updatedChapter = await swapChapterNumber({
     bookId,
-    chapterNumber,
-    destinationChapterNumber,
+    idsOfNewOrder
   });
 
   return updatedChapter;

@@ -213,37 +213,25 @@ export async function updateChapterTitle({
 
 export async function swapChapterNumber({
   bookId,
-  chapterNumber,
-  destinationChapterNumber,
+  idsOfNewOrder,
 }: {
   bookId: number;
-  chapterNumber: number;
-  destinationChapterNumber: number;
+  idsOfNewOrder: number[];
 }) {
   try {
-    const [sourceChapter] = await db
-      .update(ChaptersTable)
-      .set({ chapterNumber: chapterNumber })
-      .where(
-        and(
-          eq(ChaptersTable.bookId, bookId),
-          eq(ChaptersTable.chapterNumber, chapterNumber)
+    for (let i = 0; i < idsOfNewOrder.length; i++) {
+      const chapterId = idsOfNewOrder[i];
+      await db
+        .update(ChaptersTable)
+        .set({ chapterNumber: i + 1 })
+        .where(
+          and(eq(ChaptersTable.bookId, bookId), eq(ChaptersTable.id, chapterId))
         )
-      )
-      .returning();
+        .returning()
+        .execute();
+    }
 
-    const [destinationChapter] = await db
-      .update(ChaptersTable)
-      .set({ chapterNumber: chapterNumber })
-      .where(
-        and(
-          eq(ChaptersTable.bookId, bookId),
-          eq(ChaptersTable.chapterNumber, destinationChapterNumber)
-        )
-      )
-      .returning();
-
-    return { sourceChapter, destinationChapter };
+    return true;
   } catch (error) {
     console.error(error);
     throw new Error("There was an error updating the chapter numbers");
