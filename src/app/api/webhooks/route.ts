@@ -55,8 +55,6 @@ export async function POST(req: Request) {
         })
         .returning({ insertedEmail: UsersTable.email });
 
-      console.log("User inserted", userInserted);
-
       return new Response("User inserted", { status: 200 });
     }
   } catch (error) {

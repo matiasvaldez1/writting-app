@@ -1,7 +1,9 @@
 "use server";
 
+import { getUserAnalytics } from "@/data-access/books";
 import { booksZodSchema } from "@/types/zodSchemas";
 import {
+  addWrittingSessionUseCase,
   createBookUseCase,
   deleteBookUseCase,
   getUserBookAndChapterUseCase,
@@ -131,5 +133,40 @@ export async function updateChapterDescription(
   return {
     status: "success",
     chapterUpdated,
+  };
+}
+
+export async function addUserWrittingSession(
+  durationOfSessionInMiliseconds: number,
+  bookId: number,
+  chapterId: number
+) {
+  const user = await getUserByClerkIdUseCase();
+
+  const writtingSession = await addWrittingSessionUseCase({
+    userId: user.id!,
+    sessionTimeInMilliseconds: durationOfSessionInMiliseconds,
+  });
+
+  revalidatePath(`/dashboard/books/${bookId}/edit/${chapterId}/editor`);
+
+  return {
+    status: "success",
+    writtingSession,
+  };
+}
+
+export async function getUserAnalitics() {
+  const user = await getUserByClerkIdUseCase();
+
+  const userAnalytics = await getUserAnalytics({
+    userId: user.id!,
+  });
+
+  revalidatePath("/dashboard");
+
+  return {
+    status: "success",
+    userAnalytics,
   };
 }

@@ -5,7 +5,21 @@ import {
   text,
   timestamp,
   uniqueIndex,
+  pgEnum,
 } from "drizzle-orm/pg-core";
+
+export const AnalyticsTypeEnum = pgEnum("analitycs_type", [
+  "sessionDuration",
+  "pageView", // Example one
+]);
+
+export const UserAnalyticsTable = pgTable("user_analytics", {
+  id: serial("id").primaryKey(),
+  userId: serial("userId").references(() => UsersTable.id),
+  type: AnalyticsTypeEnum("analitycs_type").notNull(),
+  value: integer("value").notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
 
 export const UsersTable = pgTable(
   "users",

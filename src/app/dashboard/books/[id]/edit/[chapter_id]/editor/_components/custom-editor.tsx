@@ -1,10 +1,15 @@
 "use client";
 
-import { updateChapterTextContent } from "@/app/_actions/books";
+import {
+  addUserWrittingSession,
+  updateChapterTextContent,
+} from "@/app/_actions/books";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useRef, useState, useTransition } from "react";
 import MenuBar from "./menu-bar";
+import React from "react";
+import useWritingSession from "@/hooks/use-writting-session";
 
 export default function CustomTextEditor({
   content,
@@ -15,13 +20,18 @@ export default function CustomTextEditor({
   chapterId: number;
   bookId: number;
 }) {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const { startTracking } = useWritingSession(async (duration) => {
+    console.log("Saved writting session ⌛");
+    await addUserWrittingSession(duration, bookId, chapterId);
+  });
   const editor = useEditor({
     extensions: [StarterKit],
     content,
     editorProps: {
       attributes: {
-        class: "w-full h-[70svh]",
         spellcheck: "false",
+        class: "prose max-w-none [&_ol]:list-decimal [&_ul]:list-disc",
       },
     },
     onUpdate: ({ editor }) => {
@@ -51,9 +61,18 @@ export default function CustomTextEditor({
   const [, startTransition] = useTransition();
 
   return (
-    <div ref={editorRef} className="w-full flex flex-col gap-10">
-      <MenuBar saving={saving} editor={editor} editorRef={editorRef} />
-      <EditorContent content={content} editor={editor} className="p-4" />
+    <div ref={editorRef} className={`${isFullscreen ? "p-10 bg-white" : ""}`}>
+      <MenuBar
+        saving={saving}
+        editor={editor}
+        editorRef={editorRef}
+        setIsFullscreen={setIsFullscreen}
+      />
+      <EditorContent
+        onClick={startTracking}
+        content={content}
+        editor={editor}
+      />
     </div>
   );
 }

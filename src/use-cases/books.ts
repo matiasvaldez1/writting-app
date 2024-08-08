@@ -1,4 +1,5 @@
 import {
+  addWritingSession,
   createBook,
   deleteBook,
   getBookAndChapter,
@@ -174,4 +175,25 @@ export async function swapChaptersUseCase({
   });
 
   return updatedChapter;
+}
+
+export async function addWrittingSessionUseCase({
+  userId,
+  sessionTimeInMilliseconds,
+}: {
+  userId: number;
+  sessionTimeInMilliseconds: number;
+}) {
+  if (!userId) {
+    throw new Error("No userId attached");
+  }
+  if (!sessionTimeInMilliseconds) {
+    throw new Error("No sessionInMiliseconds attached");
+  }
+  const addedWrittingSession = await addWritingSession({
+    userId,
+    sessionTimeInMilliseconds
+  });
+
+  return addedWrittingSession;
 }

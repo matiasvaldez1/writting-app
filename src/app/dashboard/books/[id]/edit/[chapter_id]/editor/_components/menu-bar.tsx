@@ -13,10 +13,12 @@ export default function MenuBar({
   editor,
   editorRef,
   saving,
+  setIsFullscreen
 }: {
   editor: any;
   editorRef: any;
   saving: boolean;
+  setIsFullscreen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [showIcon, setShowIcon] = useState(false);
 
@@ -31,6 +33,7 @@ export default function MenuBar({
 
   screenfull.onchange((e) => {
     setShowIcon(screenfull.isFullscreen);
+    setIsFullscreen(screenfull.isFullscreen);
   });
 
   if (!editor) {
@@ -38,7 +41,7 @@ export default function MenuBar({
   }
 
   return (
-    <div className="flex gap-8">
+    <div className="flex flex-wrap gap-6 py-8">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={editor.isActive("bold") ? "is-active" : ""}

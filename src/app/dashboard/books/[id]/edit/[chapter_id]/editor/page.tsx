@@ -22,7 +22,7 @@ export default async function EditChapter({
         title={`Edit chapter N°${bookAndChapter.chapter.chapterNumber}: 
         ${bookAndChapter.chapter.chapterTitle}`}
       />
-      <div className="my-8">
+      <div>
         <Tiptap
           bookId={integerBookId}
           chapterId={integerChapterId}

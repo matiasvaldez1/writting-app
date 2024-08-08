@@ -61,7 +61,9 @@ export default function ChaptersList({
 
     const idsOfNewOrder = newState.map((chapter) => chapter.id);
 
-    swapOptimistic({ sourceChapterNumber, destinationChapterNumber });
+    startTransition(async () => {
+      swapOptimistic({ sourceChapterNumber, destinationChapterNumber });
+    });
     startTransition(async () => {
       await swapChaptersAction(bookId, idsOfNewOrder);
     });
@@ -77,6 +79,7 @@ export default function ChaptersList({
               {...droppableProvided.droppableProps}
               className="grid grid-cols-1 gap-4 "
             >
+              {droppableProvided.placeholder}
               {optimisticState.map((chapter, idx) => (
                 <Draggable
                   index={idx}

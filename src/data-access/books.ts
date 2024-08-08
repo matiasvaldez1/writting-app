@@ -1,7 +1,13 @@
 import { db } from "@/drizzle/db";
-import { BooksTable, ChaptersTable } from "@/drizzle/schema";
+import {
+  AnalyticsTypeEnum,
+  BooksTable,
+  ChaptersTable,
+  UserAnalyticsTable,
+} from "@/drizzle/schema";
 import { booksZodType } from "@/types/types";
 import { and, eq } from "drizzle-orm";
+import { z } from "zod";
 
 export async function createBook({ values }: { values: booksZodType }) {
   const { userId, bookDescription, bookName, amountOfChapters } = values;
@@ -226,5 +232,43 @@ export async function swapChapterNumber({
   } catch (error) {
     console.error(error);
     throw new Error("There was an error updating the chapter numbers");
+  }
+}
+
+export async function addWritingSession({
+  userId,
+  sessionTimeInMilliseconds,
+}: {
+  userId: number;
+  sessionTimeInMilliseconds: number;
+}) {
+  try {
+    const [newRecord] = await db
+      .insert(UserAnalyticsTable)
+      .values({
+        userId: userId,
+        type: AnalyticsTypeEnum.enumValues["0"],
+        value: Math.round(sessionTimeInMilliseconds / 1000),
+      })
+      .returning();
+
+    return newRecord;
+  } catch (error) {
+    console.error(error);
+    throw new Error("There was an error recording the writing session");
+  }
+}
+
+export async function getUserAnalytics({ userId }: { userId: number }) {
+  try {
+    const analytics = await db
+      .select()
+      .from(UserAnalyticsTable)
+      .where(eq(UserAnalyticsTable.userId, userId));
+
+    return analytics;
+  } catch (error) {
+    console.error(error);
+    throw new Error("There was an error getting user analytics");
   }
 }
