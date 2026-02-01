@@ -1,14 +1,17 @@
-'use server';
+"use server";
 
-import { getUserByClerkId } from "@/data-access/user";
 import { currentUser } from "@clerk/nextjs/server";
+import { getUserByClerkId } from "@/data-access/user";
 
 export async function getUserByClerkIdUseCase() {
   const currentUserResponse = await currentUser();
   if (!currentUserResponse?.id) {
-    throw new Error("Not user id found");
+    throw new Error("No user id found");
   }
-  const user = await getUserByClerkId({ clerkId: currentUserResponse?.id });
+  const user = await getUserByClerkId({ clerkId: currentUserResponse.id });
+  if (!user) {
+    throw new Error("User not found in database");
+  }
 
-  return { ...user, userId: user?.id };
+  return { ...user, userId: user.id };
 }

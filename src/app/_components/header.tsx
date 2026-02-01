@@ -1,11 +1,11 @@
-import { ModeToggle } from "@/components/theme-toggle";
-import { Button } from "@/components/ui/button";
-import { EMPTY_STRING } from "@/lib/constants";
-import { capitalizeUsername } from "@/lib/utils";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
+import { ModeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { EMPTY_STRING } from "@/lib/constants";
+import { capitalizeUsername } from "@/lib/utils";
 
 export default async function Header() {
   const user = await currentUser();
@@ -15,8 +15,8 @@ export default async function Header() {
         <SignedIn>
           <Link href={"/dashboard"}>
             <Image
-              src={"/writter-app-logo.png"}
-              alt="Writter app logo"
+              src={"/writer-app-logo.png"}
+              alt="Writer app logo"
               width={200}
               height={50}
             />
@@ -25,8 +25,8 @@ export default async function Header() {
         <SignedOut>
           <Link href={"/"}>
             <Image
-              src={"/writter-app-logo.png"}
-              alt="Writter app logo"
+              src={"/writer-app-logo.png"}
+              alt="Writer app logo"
               width={200}
               height={50}
             />

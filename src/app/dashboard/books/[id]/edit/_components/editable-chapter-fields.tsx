@@ -28,27 +28,14 @@ function EditableChaptersFields({
   const [title, setTitle] = useState(chapter.chapterTitle);
   const [description, setDescription] = useState(chapter.chapterDescription);
 
-  const handleTitleChange = (e: any) => {
-    setTitle(e.target.value);
-  };
-
-  const handleDescriptionChange = (e: any) => {
-    setDescription(e.target.value);
-  };
-
   const handleSaveNewTitle = () => {
     startTransition(async () => {
       try {
         await updateChapterTitle(bookId, Number(chapter.id), title);
-        toast({
-          title: "Chapter title updated",
-        });
-      } catch (error: any) {
-        console.error("error", error);
-        toast({
-          title: "Chapter title not updated",
-          description: error?.message ?? "",
-        });
+        toast({ title: "Chapter title updated" });
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "";
+        toast({ title: "Chapter title not updated", description: message });
       }
     });
     setEditingTitle(false);
@@ -58,15 +45,12 @@ function EditableChaptersFields({
     startTransition(async () => {
       try {
         await updateChapterDescription(bookId, Number(chapter.id), description);
-      } catch (error: any) {
-        console.error("error", error);
+        toast({ title: "Chapter description updated" });
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "";
         toast({
           title: "Chapter description not updated",
-          description: error?.message ?? "",
-        });
-      } finally {
-        toast({
-          title: "Chapter description updated",
+          description: message,
         });
       }
     });
@@ -88,7 +72,7 @@ function EditableChaptersFields({
               className="h-6"
               type="text"
               value={title}
-              onChange={handleTitleChange}
+              onChange={(e) => setTitle(e.target.value)}
             />
             <CheckIcon
               onClick={handleSaveNewTitle}
@@ -112,7 +96,7 @@ function EditableChaptersFields({
               className="h-6"
               type="text"
               value={description}
-              onChange={handleDescriptionChange}
+              onChange={(e) => setDescription(e.target.value)}
             />
             <CheckIcon
               onClick={handleSaveNewDescription}

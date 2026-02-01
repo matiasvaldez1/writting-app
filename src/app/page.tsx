@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
-import RedoAnimText from "./_components/anim-writting-text";
+import { Button } from "@/components/ui/button";
+import RedoAnimText from "./_components/anim-writing-text";
 import FeaturesSection from "./_components/features-section";
 
 export default function LandingPage() {
@@ -26,7 +26,7 @@ export default function LandingPage() {
                 Looking to unleash your creativity and bring your writing
                 projects to life? Look no further than our Writing App! With our
                 user-friendly platform, you can seamlessly organize all your
-                writtings in one place.
+                writings in one place.
               </p>
               <div className="flex justify-evenly p-10">
                 <Link href={"/sign-in"}>
@@ -66,7 +66,7 @@ export default function LandingPage() {
           reversed={false}
           image="export-as-pdf-result-demo.jpg"
           title="Export as PDF"
-          text="When you finish writting your book you can click on the Generate Pdf section and this will generate a downloadable PDF for you to easily visualize your draft."
+          text="When you finish writing your book you can click on the Generate Pdf section and this will generate a downloadable PDF for you to easily visualize your draft."
         />
       </div>
       <div className="h-1 my-32" />
@@ -97,7 +97,7 @@ export default function LandingPage() {
               <div>
                 <p className="leading-7 p-8 md:p-20 text-xl">
                   Sign up to start using all the functionalities from our
-                  writting app!
+                  writing app!
                 </p>
                 <Link href={"/sign-up"}>
                   <Button className="text-2xl" variant="link">

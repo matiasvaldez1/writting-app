@@ -10,8 +10,21 @@ import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Writter app",
-  description: "An app where to have all of your writtings",
+  title: "Writer App",
+  description:
+    "A writing app to organize, write, and export your books and stories.",
+  openGraph: {
+    title: "Writer App",
+    description:
+      "A writing app to organize, write, and export your books and stories.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Writer App",
+    description:
+      "A writing app to organize, write, and export your books and stories.",
+  },
 };
 
 export default function RootLayout({

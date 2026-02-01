@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import React from "react";
+import { Button } from "@/components/ui/button";
 
 export default function Footer() {
   return (
@@ -21,10 +20,10 @@ export default function Footer() {
       </div>
       <div className="flex flex-col gap-8">
         <Link href={"/"}>
-          <Button variant="link">Lorem ipsum dolor sit </Button>
+          <Button variant="link">Privacy Policy</Button>
         </Link>
         <Link href={"/"}>
-          <Button variant="link">Lorem ipsum dolor sit amet.</Button>
+          <Button variant="link">About</Button>
         </Link>
       </div>
     </div>

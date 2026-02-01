@@ -1,6 +1,6 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
-import { WebhookEvent } from "@clerk/nextjs/server";
+import type { WebhookEvent } from "@clerk/nextjs/server";
 import { db } from "@/drizzle/db";
 import { UsersTable } from "@/drizzle/schema";
 
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   const svix_signature = headerPayload.get("svix-signature");
 
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    return new Response("Error occured -- no svix headers", {
+    return new Response("Error occurred -- no svix headers", {
       status: 400,
     });
   }
@@ -37,29 +37,40 @@ export async function POST(req: Request) {
       "svix-timestamp": svix_timestamp,
       "svix-signature": svix_signature,
     }) as WebhookEvent;
-  } catch (err) {
-    console.error("Error verifying webhook:", err);
-    return new Response("Error occured", {
+  } catch {
+    return new Response("Error occurred -- invalid signature", {
       status: 400,
     });
   }
 
-  try {
-    if (payload.type === "user.created") {
-      const userInserted = await db
-        .insert(UsersTable)
-        .values({
-          email: payload?.data?.email_addresses[0]?.email_address,
-          name: payload?.data.first_name + payload.data.last_name,
-          clerkId: payload?.data?.id,
-        })
-        .returning({ insertedEmail: UsersTable.email });
+  if (evt.type !== "user.created") {
+    return new Response("Event type not handled", { status: 200 });
+  }
 
-      return new Response("User inserted", { status: 200 });
+  const { email_addresses, first_name, last_name, id } = evt.data;
+  const email = email_addresses?.[0]?.email_address;
+
+  if (!email || !id) {
+    return new Response("Missing required user data", { status: 400 });
+  }
+
+  const nameParts = [first_name, last_name].filter(Boolean);
+  const name = nameParts.length > 0 ? nameParts.join(" ") : "User";
+
+  try {
+    const [userInserted] = await db
+      .insert(UsersTable)
+      .values({ email, name, clerkId: id })
+      .returning({ insertedEmail: UsersTable.email });
+
+    if (!userInserted) {
+      return new Response("Failed to insert user", { status: 500 });
     }
-  } catch (error) {
+
+    return new Response("User inserted", { status: 200 });
+  } catch {
     return new Response("There was an error inserting the user", {
-      status: 400,
+      status: 500,
     });
   }
 }

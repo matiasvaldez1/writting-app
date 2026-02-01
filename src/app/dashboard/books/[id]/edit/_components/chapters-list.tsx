@@ -1,13 +1,20 @@
 "use client";
 
-import { getUserBookAndChapters } from "@/app/_actions/books";
-import EditableChaptersFields from "./editable-chapter-fields";
 import Link from "next/link";
-import { DragHandleDots1Icon } from "@radix-ui/react-icons";
-import { AsyncReturnType } from "@/types/types";
+import {
+  DragHandleDots1Icon,
+  PlusIcon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 import { Draggable, Droppable, DragDropContext } from "@hello-pangea/dnd";
 import { useOptimistic, useTransition } from "react";
+import type { AsyncReturnType } from "@/types/types";
+import { addChapterAction, deleteChapterAction } from "@/app/_actions/books";
+import type { getUserBookAndChapters } from "@/app/_actions/books";
 import { swapChaptersAction } from "@/app/_actions/chapters";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import EditableChaptersFields from "./editable-chapter-fields";
 
 export default function ChaptersList({
   bookAndChapters,
@@ -18,7 +25,8 @@ export default function ChaptersList({
   >["bookAndChapters"];
   bookId: number;
 }) {
-  const [, startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
+  const { toast } = useToast();
   const [optimisticState, swapOptimistic] = useOptimistic(
     bookAndChapters.chapters,
     (
@@ -28,38 +36,40 @@ export default function ChaptersList({
         destinationChapterNumber,
       }: { sourceChapterNumber: number; destinationChapterNumber: number }
     ) => {
-      const sourceChapterNumberIndex = state.findIndex(
-        (chapter) => chapter.chapterNumber === sourceChapterNumber
+      const sourceIdx = state.findIndex(
+        (ch) => ch.chapterNumber === sourceChapterNumber
       );
-      const destinationChapterNumberIndex = state.findIndex(
-        (chapter) => chapter.chapterNumber === destinationChapterNumber
+      const destIdx = state.findIndex(
+        (ch) => ch.chapterNumber === destinationChapterNumber
       );
       const newState = [...state];
-      newState[sourceChapterNumberIndex] = state[destinationChapterNumberIndex];
-      newState[destinationChapterNumberIndex] = state[sourceChapterNumberIndex];
-
+      newState[sourceIdx] = state[destIdx];
+      newState[destIdx] = state[sourceIdx];
       return newState;
     }
   );
 
-  const onDragEnd = async (result: any) => {
+  const onDragEnd = async (result: {
+    draggableId: string;
+    destination?: { index: number } | null;
+  }) => {
+    if (!result.destination) return;
+
     const sourceChapterNumber = Number(result.draggableId);
     const destinationChapterNumber =
-      bookAndChapters.chapters[result.destination.index as any].chapterNumber;
+      bookAndChapters.chapters[result.destination.index].chapterNumber;
 
-    const sourceChapterNumberIndex = optimisticState.findIndex(
-      (chapter) => chapter.chapterNumber === sourceChapterNumber
+    const sourceIdx = optimisticState.findIndex(
+      (ch) => ch.chapterNumber === sourceChapterNumber
     );
-    const destinationChapterNumberIndex = optimisticState.findIndex(
-      (chapter) => chapter.chapterNumber === destinationChapterNumber
+    const destIdx = optimisticState.findIndex(
+      (ch) => ch.chapterNumber === destinationChapterNumber
     );
     const newState = [...optimisticState];
-    newState[sourceChapterNumberIndex] =
-      optimisticState[destinationChapterNumberIndex];
-    newState[destinationChapterNumberIndex] =
-      optimisticState[sourceChapterNumberIndex];
+    newState[sourceIdx] = optimisticState[destIdx];
+    newState[destIdx] = optimisticState[sourceIdx];
 
-    const idsOfNewOrder = newState.map((chapter) => chapter.id);
+    const idsOfNewOrder = newState.map((ch) => ch.id);
 
     startTransition(async () => {
       swapOptimistic({ sourceChapterNumber, destinationChapterNumber });
@@ -69,22 +79,44 @@ export default function ChaptersList({
     });
   };
 
+  const handleAddChapter = () => {
+    startTransition(async () => {
+      try {
+        await addChapterAction(bookId);
+        toast({ title: "Chapter added" });
+      } catch {
+        toast({ title: "Failed to add chapter" });
+      }
+    });
+  };
+
+  const handleDeleteChapter = (chapterId: number) => {
+    startTransition(async () => {
+      try {
+        await deleteChapterAction(bookId, chapterId);
+        toast({ title: "Chapter deleted" });
+      } catch {
+        toast({ title: "Failed to delete chapter" });
+      }
+    });
+  };
+
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="chapters">
-        {(droppableProvided) => {
-          return (
+    <div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="chapters">
+          {(droppableProvided) => (
             <ul
               ref={droppableProvided.innerRef}
               {...droppableProvided.droppableProps}
-              className="grid grid-cols-1 gap-4 "
+              className="grid grid-cols-1 gap-4"
             >
               {droppableProvided.placeholder}
               {optimisticState.map((chapter, idx) => (
                 <Draggable
                   index={idx}
                   key={chapter.id}
-                  draggableId={String(chapter?.chapterNumber)}
+                  draggableId={String(chapter.chapterNumber)}
                 >
                   {(provided) => (
                     <li ref={provided.innerRef} {...provided.draggableProps}>
@@ -96,9 +128,22 @@ export default function ChaptersList({
                             bookId={bookId}
                             chapter={chapter}
                           />
-                          <button {...provided.dragHandleProps}>
-                            <DragHandleDots1Icon className="h-8 w-8 cursor-grab" />
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleDeleteChapter(chapter.id);
+                              }}
+                              title="Delete chapter"
+                              className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                            >
+                              <TrashIcon className="h-5 w-5" />
+                            </button>
+                            <button {...provided.dragHandleProps}>
+                              <DragHandleDots1Icon className="h-8 w-8 cursor-grab" />
+                            </button>
+                          </div>
                         </div>
                       </Link>
                     </li>
@@ -106,9 +151,18 @@ export default function ChaptersList({
                 </Draggable>
               ))}
             </ul>
-          );
-        }}
-      </Droppable>
-    </DragDropContext>
+          )}
+        </Droppable>
+      </DragDropContext>
+      <Button
+        onClick={handleAddChapter}
+        disabled={isPending}
+        variant="outline"
+        className="mt-4 w-full"
+      >
+        <PlusIcon className="mr-2 h-4 w-4" />
+        Add chapter
+      </Button>
+    </div>
   );
 }

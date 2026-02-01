@@ -1,11 +1,11 @@
 import PageHeading from "@/components/ui/page-header";
-import { getUserAnalitics } from "../_actions/books";
+import { getUserAnalyticsAction } from "../_actions/books";
 import { SessionDurationChart } from "../_components/dashboard-charts";
 import { NothingToSeeYet } from "../_components/nothing-to-see-yet";
 
 export default async function Dashboard() {
-  const { userAnalytics } = await getUserAnalitics();
-  
+  const { userAnalytics } = await getUserAnalyticsAction();
+
   if (userAnalytics.length === 0) {
     return <NothingToSeeYet />;
   }
