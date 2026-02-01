@@ -76,7 +76,7 @@ export const UserAnalyticsTable = pgTable(
     userId: integer("userId")
       .notNull()
       .references(() => UsersTable.id, { onDelete: "cascade" }),
-    type: AnalyticsTypeEnum("analytics_type").notNull(),
+    type: AnalyticsTypeEnum("analitycs_type").notNull(),
     value: integer("value").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
   },
