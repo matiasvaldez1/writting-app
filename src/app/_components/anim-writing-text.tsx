@@ -2,10 +2,12 @@
 
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 
 export default function RedoAnimText() {
+  const t = useTranslations("landing");
   const textIndex = useMotionValue(0);
-  const texts = ["Shall we begin writing?"];
+  const texts = [t("animText")];
   const containerRef = useRef(null);
 
   const baseText = useTransform(textIndex, (latest) => texts[latest] || "");

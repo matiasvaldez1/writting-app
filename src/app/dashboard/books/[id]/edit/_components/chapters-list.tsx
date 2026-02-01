@@ -8,6 +8,7 @@ import {
 } from "@radix-ui/react-icons";
 import { Draggable, Droppable, DragDropContext } from "@hello-pangea/dnd";
 import { useOptimistic, useTransition } from "react";
+import { useTranslations } from "next-intl";
 import type { AsyncReturnType } from "@/types/types";
 import { addChapterAction, deleteChapterAction } from "@/app/_actions/books";
 import type { getUserBookAndChapters } from "@/app/_actions/books";
@@ -25,6 +26,7 @@ export default function ChaptersList({
   >["bookAndChapters"];
   bookId: number;
 }) {
+  const t = useTranslations("editBook");
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const [optimisticState, swapOptimistic] = useOptimistic(
@@ -83,9 +85,9 @@ export default function ChaptersList({
     startTransition(async () => {
       try {
         await addChapterAction(bookId);
-        toast({ title: "Chapter added" });
+        toast({ title: t("chapterAdded") });
       } catch {
-        toast({ title: "Failed to add chapter" });
+        toast({ title: t("chapterAddFailed") });
       }
     });
   };
@@ -94,9 +96,9 @@ export default function ChaptersList({
     startTransition(async () => {
       try {
         await deleteChapterAction(bookId, chapterId);
-        toast({ title: "Chapter deleted" });
+        toast({ title: t("chapterDeleted") });
       } catch {
-        toast({ title: "Failed to delete chapter" });
+        toast({ title: t("chapterDeleteFailed") });
       }
     });
   };
@@ -135,7 +137,7 @@ export default function ChaptersList({
                                 e.stopPropagation();
                                 handleDeleteChapter(chapter.id);
                               }}
-                              title="Delete chapter"
+                              title={t("deleteChapter")}
                               className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
                             >
                               <TrashIcon className="h-5 w-5" />
@@ -161,7 +163,7 @@ export default function ChaptersList({
         className="mt-4 w-full"
       >
         <PlusIcon className="mr-2 h-4 w-4" />
-        Add chapter
+        {t("addChapter")}
       </Button>
     </div>
   );

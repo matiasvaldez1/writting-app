@@ -3,13 +3,16 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import RedoAnimText from "./_components/anim-writing-text";
 import FeaturesSection from "./_components/features-section";
 
 export default function LandingPage() {
+  const t = useTranslations("landing");
+  const tc = useTranslations("common");
   return (
-    <div className="pt-0 pr-10 pb-0 pl-10">
+    <div className="px-4 md:px-10">
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -20,21 +23,18 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 2xl:grid-cols-2 rounded-md">
             <div className="p-10 2xl:p-24 flex flex-col gap-10 2xl:gap-6">
               <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                Write, Organize, Publish: Your Complete Writing Companion!
+                {t("heroTitle")}
               </h1>
               <p className="leading-7 text-sm xl:text-xl mt-4">
-                Looking to unleash your creativity and bring your writing
-                projects to life? Look no further than our Writing App! With our
-                user-friendly platform, you can seamlessly organize all your
-                writings in one place.
+                {t("heroDescription")}
               </p>
-              <div className="flex justify-evenly p-10">
+              <div className="flex flex-col sm:flex-row justify-evenly gap-4 p-10">
                 <Link href={"/sign-in"}>
-                  <Button size={"lg"}>Get started</Button>
+                  <Button size={"lg"}>{t("getStarted")}</Button>
                 </Link>
                 <a href={"#more"}>
                   <Button size={"lg"} variant={"link"}>
-                    Read more
+                    {t("readMore")}
                   </Button>
                 </a>
               </div>
@@ -42,7 +42,6 @@ export default function LandingPage() {
             <div className="p-10">
               <video width={"100%"} height={"100%"} autoPlay muted>
                 <source src="/demo-video.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
               </video>
             </div>
           </div>
@@ -53,20 +52,20 @@ export default function LandingPage() {
         <FeaturesSection
           reversed={false}
           image="edit-your-book-content-demo.png"
-          title="Edit Your Book"
-          text="You will be able to edit your book with a bunch of different options in our built in - easy to use text editor."
+          title={t("featureEditTitle")}
+          text={t("featureEditText")}
         />
         <FeaturesSection
           reversed={true}
           image="managing-chapters-demo.jpg"
-          title="Manage Chapters"
-          text="You can easily manage the order of your books by just dragging them around changing their order, renaming their titles or descriptions."
+          title={t("featureManageTitle")}
+          text={t("featureManageText")}
         />
         <FeaturesSection
           reversed={false}
           image="export-as-pdf-result-demo.jpg"
-          title="Export as PDF"
-          text="When you finish writing your book you can click on the Generate Pdf section and this will generate a downloadable PDF for you to easily visualize your draft."
+          title={t("featureExportTitle")}
+          text={t("featureExportText")}
         />
       </div>
       <div className="h-1 my-32" />
@@ -77,8 +76,7 @@ export default function LandingPage() {
         className="flex justify-center my-6"
       >
         <blockquote className="mt-6 border-l-2 pl-6 italic">
-          &quot;The scariest moment is always just before you start.&quot; -
-          Stephen King
+          {t("quote")}
         </blockquote>
       </motion.div>
       <div className="h-1 my-40" />
@@ -95,21 +93,18 @@ export default function LandingPage() {
                 <RedoAnimText />
               </h1>
               <div>
-                <p className="leading-7 p-8 md:p-20 text-xl">
-                  Sign up to start using all the functionalities from our
-                  writing app!
-                </p>
+                <p className="leading-7 p-8 md:p-20 text-xl">{t("ctaTitle")}</p>
                 <Link href={"/sign-up"}>
                   <Button className="text-2xl" variant="link">
-                    Sign up
+                    {tc("signUp")}
                   </Button>
                 </Link>
                 <p className="leading-7 p-20 text-xl">
-                  Already have an account?
+                  {t("ctaAlreadyHaveAccount")}
                 </p>
                 <Link href={"/sign-in"}>
                   <Button className="text-2xl" variant="link">
-                    Log in
+                    {tc("logIn")}
                   </Button>
                 </Link>
               </div>

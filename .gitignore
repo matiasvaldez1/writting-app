@@ -40,3 +40,8 @@ next-env.d.ts
 
 .vercel
 /db
+
+# PWA
+public/sw.js
+public/workbox-*.js
+public/swe-worker-*.js

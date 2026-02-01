@@ -12,12 +12,16 @@ import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
 import { useRef, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
+import { HelpDialog } from "@/components/help-dialog";
 import {
   addWritingSession,
   updateChapterTextContent,
 } from "@/app/_actions/books";
 import useWritingSession from "@/hooks/use-writing-session";
-import MenuBar from "./menu-bar";
+import EditorTopBar from "./editor-top-bar";
+import BubbleMenuBar from "./bubble-menu-bar";
+import FloatingMenuBar from "./floating-menu-bar";
 
 export default function CustomTextEditor({
   content,
@@ -28,7 +32,9 @@ export default function CustomTextEditor({
   chapterId: number;
   bookId: number;
 }) {
+  const t = useTranslations("editor");
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const { startTracking } = useWritingSession(async (duration) => {
     await addWritingSession(duration, bookId, chapterId);
   });
@@ -46,7 +52,7 @@ export default function CustomTextEditor({
       Underline,
       CharacterCount,
       Placeholder.configure({
-        placeholder: "Start writing...",
+        placeholder: t("startWriting"),
       }),
       Link.configure({
         openOnClick: false,
@@ -68,7 +74,7 @@ export default function CustomTextEditor({
       attributes: {
         spellcheck: "true",
         class:
-          "prose max-w-none [&_ol]:list-decimal [&_ul]:list-disc focus:outline-none min-h-[500px]",
+          "prose prose-lg dark:prose-invert leading-relaxed max-w-none [&_ol]:list-decimal [&_ul]:list-disc focus:outline-none min-h-[70vh]",
       },
     },
     onUpdate: ({ editor }) => {
@@ -93,24 +99,27 @@ export default function CustomTextEditor({
   });
 
   const wordCount = editor?.storage.characterCount.words() ?? 0;
-  const charCount = editor?.storage.characterCount.characters() ?? 0;
 
   return (
     <div
       ref={editorRef}
       className={`${isFullscreen ? "p-10 bg-background" : ""}`}
     >
-      <MenuBar
+      <EditorTopBar
         saving={saving}
         editor={editor}
         editorRef={editorRef}
         setIsFullscreen={setIsFullscreen}
+        wordCount={wordCount}
+        bookId={bookId}
+        onHelpOpen={() => setHelpOpen(true)}
       />
-      <EditorContent onClick={startTracking} editor={editor} />
-      <div className="flex gap-4 mt-3 text-xs text-muted-foreground">
-        <span>{wordCount} words</span>
-        <span>{charCount} characters</span>
+      {editor && <BubbleMenuBar editor={editor} />}
+      {editor && <FloatingMenuBar editor={editor} />}
+      <div className="mx-auto max-w-[720px] px-6 py-12">
+        <EditorContent onClick={startTracking} editor={editor} />
       </div>
+      <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
     </div>
   );
 }

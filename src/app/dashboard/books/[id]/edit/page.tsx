@@ -10,7 +10,7 @@ export default async function EditBook({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <div className="flex justify-between w-full items-start">
+      <div className="flex flex-col sm:flex-row justify-between w-full items-start gap-4">
         <EditableBookFields
           bookId={Number(params.id)}
           initialName={bookAndChapters.bookName}

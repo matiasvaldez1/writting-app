@@ -13,17 +13,19 @@ export default function FeaturesSection({
   text: string;
 }) {
   return (
-    <div className={`flex flex-row ${reversed ? "flex-row-reverse" : ""}`}>
+    <div
+      className={`flex flex-col md:flex-row ${reversed ? "md:flex-row-reverse" : ""}`}
+    >
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="w-1/2 p-8"
+        className="w-full md:w-1/2 p-8"
       >
         <h2 className="text-4xl font-bold mb-4">{title}</h2>
         <p className="leading-7 text-sm xl:text-xl mt-6">{text}</p>
       </motion.div>
-      <div className="w-1/2 p-8">
+      <div className="w-full md:w-1/2 p-8">
         <motion.img
           src={image}
           alt="Section Image"

@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   HomeIcon,
   ReaderIcon,
@@ -9,8 +8,10 @@ import {
 } from "@radix-ui/react-icons";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { LoadingSpinner } from "@/components/ui/loading";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { LoadingSpinner } from "@/components/ui/loading";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardLayout({
   children,
@@ -18,6 +19,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const t = useTranslations("dashboard.sidebar");
   const defaulClosedPath = pathname.includes("editor");
   const [hasMounted, setHasMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(
@@ -51,20 +53,20 @@ export default function DashboardLayout({
   if (!hasMounted) return <LoadingSpinner className="mx-auto mt-[30svh]" />;
 
   return (
-    <div className="flex p-12 gap-6 min-h-[80svh]">
+    <div className="flex p-4 md:p-8 lg:p-12 gap-6 min-h-[80svh]">
       {isSidebarOpen && (
-        <aside className="flex flex-col gap-10 border border-l-0 border-t-0 border-b-0 border-gray-200 relative group transition duration-300 ease-in-out">
+        <aside className="hidden lg:flex flex-col gap-10 border border-l-0 border-t-0 border-b-0 border-gray-200 relative group transition duration-300 ease-in-out">
           <div>
             <Link className="p-4" href={"/dashboard"}>
               <Button className="text-xl" size={"lg"} variant="link">
-                <HomeIcon className="h-4 w-4" /> &nbsp; Dashboard
+                <HomeIcon className="h-4 w-4" /> &nbsp; {t("dashboard")}
               </Button>
             </Link>
           </div>
           <div>
             <Link className="p-4" href={"/dashboard/books"}>
               <Button className="text-xl" size={"lg"} variant="link">
-                <ReaderIcon className="h-4 w-4" /> &nbsp; Books
+                <ReaderIcon className="h-4 w-4" /> &nbsp; {t("books")}
               </Button>
             </Link>
           </div>
@@ -82,7 +84,7 @@ export default function DashboardLayout({
         </aside>
       )}
       {!isSidebarOpen && (
-        <aside className="flex flex-col gap-10 border border-l-0 border-t-0 border-b-0 border-gray-200 relative group">
+        <aside className="hidden lg:flex flex-col gap-10 border border-l-0 border-t-0 border-b-0 border-gray-200 relative group">
           <div>
             <Link href={"/dashboard"}>
               <Button className="text-xl" variant="link">

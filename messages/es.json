@@ -1,0 +1,159 @@
+{
+  "common": {
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse",
+    "logIn": "Ingresar",
+    "logoAlt": "Logo de Writer App"
+  },
+  "landing": {
+    "heroTitle": "Escribe, Organiza, Publica: ¡Tu compañero de escritura completo!",
+    "heroDescription": "¿Buscas liberar tu creatividad y dar vida a tus proyectos de escritura? ¡No busques más! Con nuestra plataforma fácil de usar, puedes organizar todas tus escrituras en un solo lugar.",
+    "getStarted": "Comenzar",
+    "readMore": "Leer más",
+    "quote": "\"El momento más aterrador es siempre justo antes de empezar.\" - Stephen King",
+    "animText": "¿Comenzamos a escribir?",
+    "ctaTitle": "¡Regístrate para comenzar a usar todas las funcionalidades de nuestra app de escritura!",
+    "ctaAlreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "featureEditTitle": "Edita tu libro",
+    "featureEditText": "Podrás editar tu libro con muchas opciones diferentes en nuestro editor de texto integrado, fácil de usar.",
+    "featureManageTitle": "Administra capítulos",
+    "featureManageText": "Puedes administrar fácilmente el orden de tus libros simplemente arrastrándolos, cambiando su orden, renombrando sus títulos o descripciones.",
+    "featureExportTitle": "Exportar como PDF",
+    "featureExportText": "Cuando termines de escribir tu libro, puedes hacer clic en la sección Generar PDF y esto generará un PDF descargable para que puedas visualizar fácilmente tu borrador."
+  },
+  "footer": {
+    "howItWorks": "Cómo funciona",
+    "faq": "Preguntas frecuentes",
+    "contact": "Contacto",
+    "termsOfService": "Términos de servicio",
+    "privacyPolicy": "Política de privacidad",
+    "about": "Acerca de"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "welcome": {
+      "title": "¡Bienvenido a la aplicación de escritura definitiva!",
+      "description": "Ya está todo listo. ¡Empieza a escribir y mira tus estadísticas en esta página!",
+      "cta": "¡Comenzar a escribir!"
+    },
+    "sidebar": {
+      "dashboard": "Panel",
+      "books": "Libros"
+    },
+    "chart": {
+      "sessionDuration": "Duración de cada sesión en minutos"
+    }
+  },
+  "books": {
+    "title": "Tus libros",
+    "searchPlaceholder": "Buscar libros...",
+    "newest": "Más recientes",
+    "oldest": "Más antiguos",
+    "nameAZ": "Nombre (A-Z)",
+    "mostChapters": "Más capítulos",
+    "noMatch": "Ningún libro coincide con tu búsqueda.",
+    "noBooks": "No hay libros creados aún.",
+    "chapters": "{count} capítulos",
+    "edit": "Editar",
+    "deleteBook": "Eliminar libro",
+    "bookDeleted": "Libro eliminado",
+    "bookDeletedDescription": "Tu libro ha sido eliminado",
+    "somethingWentWrong": "Algo salió mal"
+  },
+  "createBook": {
+    "trigger": "Crear nuevo libro",
+    "title": "Crear libro",
+    "bookName": "Nombre del libro",
+    "bookDescription": "Descripción del libro",
+    "chaptersQuestion": "¿Sabes cuántos capítulos tendrá tu libro?",
+    "amountOfChapters": "Cantidad de capítulos",
+    "saving": "Guardando...",
+    "save": "Guardar",
+    "bookCreated": "Libro creado"
+  },
+  "editBook": {
+    "previewPdf": "Vista previa PDF",
+    "previewPdfDescription": "Descarga el documento PDF de tu libro. Expórtalo y previsualízalo en tu dispositivo favorito.",
+    "loading": "Cargando documento...",
+    "download": "¡Descargar ahora!",
+    "addChapter": "Agregar capítulo",
+    "chapterAdded": "Capítulo agregado",
+    "chapterAddFailed": "Error al agregar capítulo",
+    "chapterDeleted": "Capítulo eliminado",
+    "chapterDeleteFailed": "Error al eliminar capítulo",
+    "deleteChapter": "Eliminar capítulo",
+    "bookNameUpdated": "Nombre del libro actualizado",
+    "bookNameUpdateFailed": "Error al actualizar nombre del libro",
+    "bookDescriptionUpdated": "Descripción del libro actualizada",
+    "bookDescriptionUpdateFailed": "Error al actualizar descripción del libro",
+    "chapterTitleUpdated": "Título del capítulo actualizado",
+    "chapterTitleNotUpdated": "Título del capítulo no actualizado",
+    "chapterDescriptionUpdated": "Descripción del capítulo actualizada",
+    "chapterDescriptionNotUpdated": "Descripción del capítulo no actualizada"
+  },
+  "editor": {
+    "editChapter": "Editar capítulo N°{number}: {title}",
+    "startWriting": "Comienza a escribir...",
+    "words": "{count} palabras",
+    "characters": "{count} caracteres",
+    "saving": "Guardando...",
+    "saved": "Guardado",
+    "toolbar": {
+      "bold": "Negrita (Ctrl+B)",
+      "italic": "Cursiva (Ctrl+I)",
+      "underline": "Subrayado (Ctrl+U)",
+      "strikethrough": "Tachado (Ctrl+Shift+S)",
+      "inlineCode": "Código en línea (Ctrl+E)",
+      "heading1": "Encabezado 1",
+      "heading2": "Encabezado 2",
+      "heading3": "Encabezado 3",
+      "alignLeft": "Alinear izquierda",
+      "alignCenter": "Alinear centro",
+      "alignRight": "Alinear derecha",
+      "justify": "Justificar",
+      "bulletList": "Lista con viñetas",
+      "orderedList": "Lista ordenada",
+      "blockquote": "Cita",
+      "codeBlock": "Bloque de código",
+      "horizontalRule": "Línea horizontal",
+      "insertLink": "Insertar enlace",
+      "insertImage": "Insertar imagen",
+      "textColor": "Color de texto",
+      "undo": "Deshacer (Ctrl+Z)",
+      "redo": "Rehacer (Ctrl+Shift+Z)",
+      "fullscreen": "Pantalla completa",
+      "linkUrl": "URL",
+      "linkApply": "Aplicar",
+      "linkRemove": "Quitar enlace",
+      "imageUrl": "URL de imagen",
+      "imageInsert": "Insertar",
+      "colorReset": "Restablecer color",
+      "back": "Volver"
+    }
+  },
+  "theme": {
+    "toggle": "Cambiar tema",
+    "light": "Claro",
+    "dark": "Oscuro"
+  },
+  "help": {
+    "title": "Ayuda de escritura",
+    "writingBasics": "Conceptos básicos",
+    "writingBasicsContent": "Tu trabajo se guarda automáticamente cada 2 segundos. Selecciona texto para formatearlo con la barra de herramientas flotante. Escribe en una línea vacía y haz clic en + para agregar bloques como encabezados, listas e imágenes.",
+    "keyboardShortcuts": "Atajos de teclado",
+    "bold": "Negrita",
+    "italic": "Cursiva",
+    "underline": "Subrayado",
+    "undo": "Deshacer",
+    "redo": "Rehacer",
+    "chapterManagement": "Gestión de capítulos",
+    "chapterManagementContent": "Arrastra y suelta capítulos para reordenarlos. Haz clic en el ícono de lápiz para renombrar títulos y descripciones. Usa el ícono de papelera para eliminar capítulos.",
+    "pdfExport": "Exportar PDF",
+    "pdfExportContent": "Haz clic en 'Vista previa PDF' en la página de edición del libro para generar y descargar un PDF con todos tus capítulos y formato preservado.",
+    "gotIt": "¡Entendido!"
+  },
+  "locale": {
+    "en": "EN",
+    "es": "ES"
+  }
+}

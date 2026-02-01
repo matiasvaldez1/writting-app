@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { CheckIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import { updateBookMetadataAction } from "@/app/_actions/books";
 import { useToast } from "@/components/ui/use-toast";
@@ -15,6 +16,7 @@ export default function EditableBookFields({
   initialName: string;
   initialDescription: string;
 }) {
+  const t = useTranslations("editBook");
   const { toast } = useToast();
   const [, startTransition] = useTransition();
   const [editingName, setEditingName] = useState(false);
@@ -26,9 +28,9 @@ export default function EditableBookFields({
     startTransition(async () => {
       try {
         await updateBookMetadataAction(bookId, { bookName: name });
-        toast({ title: "Book name updated" });
+        toast({ title: t("bookNameUpdated") });
       } catch {
-        toast({ title: "Failed to update book name" });
+        toast({ title: t("bookNameUpdateFailed") });
       }
     });
     setEditingName(false);
@@ -40,9 +42,9 @@ export default function EditableBookFields({
         await updateBookMetadataAction(bookId, {
           bookDescription: description,
         });
-        toast({ title: "Book description updated" });
+        toast({ title: t("bookDescriptionUpdated") });
       } catch {
-        toast({ title: "Failed to update book description" });
+        toast({ title: t("bookDescriptionUpdateFailed") });
       }
     });
     setEditingDescription(false);

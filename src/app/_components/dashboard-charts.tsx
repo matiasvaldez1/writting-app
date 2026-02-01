@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useTranslations } from "next-intl";
 
 export function SessionDurationChart({
   userAnalytics,
@@ -22,6 +23,7 @@ export function SessionDurationChart({
     value: number;
   }[];
 }) {
+  const t = useTranslations("dashboard.chart");
   return (
     <ResponsiveContainer width="100%" height={330}>
       <LineChart
@@ -37,7 +39,7 @@ export function SessionDurationChart({
         <Legend />
         <Line
           type="monotone"
-          name="Duration of each session in minutes"
+          name={t("sessionDuration")}
           dataKey="duration"
           stroke="#8884d8"
         />

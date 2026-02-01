@@ -32,9 +32,11 @@ Server Actions (src/app/_actions/)
 - **Auth**: Clerk (`clerkMiddleware` in `src/middleware.ts`). Clerk webhook at `/api/webhooks` syncs users to PostgreSQL.
 - **Database**: PostgreSQL via Vercel Postgres + Drizzle ORM. Schema in `src/drizzle/schema.ts`. Tables: `users`, `books`, `chapters`, `user_analytics`. All foreign keys have `ON DELETE CASCADE` and indexes.
 - **Ownership checks**: Every server action verifies the authenticated user owns the book/chapter being accessed via `verifyBookOwnership()` in data-access layer.
-- **Editor**: Tiptap rich text editor with extensions (StarterKit, Color, TextStyle, Typography, Underline, CharacterCount, Placeholder, Link, Image, TextAlign). 2-second debounce auto-save. Writing session duration tracked via `useWritingSession` hook and stored in `user_analytics`.
+- **Editor**: Tiptap rich text editor with extensions (StarterKit, Color, TextStyle, Typography, Underline, CharacterCount, Placeholder, Link, Image, TextAlign). Medium-like UX with `BubbleMenu` (inline formatting on text selection), `FloatingMenu` (block insertion on empty lines), and a slim `EditorTopBar` (undo/redo, save status, word count, fullscreen, help). 2-second debounce auto-save. Writing session duration tracked via `useWritingSession` hook and stored in `user_analytics`.
 - **UI**: shadcn/ui (new-york style) + Tailwind CSS. Dark/light mode via `next-themes`. Shared UI components in `src/components/ui/`.
-- **PDF export**: `@react-pdf/renderer` + `react-pdf-html` generates book PDFs preserving rich text formatting.
+- **PDF export**: `@react-pdf/renderer` + `react-pdf-html` generates book PDFs with comprehensive HTML stylesheet for headings, lists, blockquotes, code, images, links, and text formatting.
+- **PWA**: `@ducanh2912/next-pwa` for offline support and install prompt. Manifest at `public/manifest.json`, icons at `public/icons/`.
+- **i18n**: `next-intl` without URL routing. Locale determined by cookie → Accept-Language → default `"en"`. Config at `src/i18n/request.ts`, message files at `messages/{en,es}.json`. Locale toggle in header sets cookie and refreshes.
 - **Drag-and-drop**: `@hello-pangea/dnd` for chapter reordering with `useOptimistic` for instant UI feedback.
 - **Environment validation**: `src/lib/env.ts` validates required env vars at startup via Zod.
 

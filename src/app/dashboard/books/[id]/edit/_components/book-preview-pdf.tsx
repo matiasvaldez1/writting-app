@@ -1,5 +1,7 @@
 "use client";
 
+import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Dialog,
   DialogContent,
@@ -8,8 +10,7 @@ import {
   DialogHeader,
   DialogDescription,
 } from "@/components/ui/dialog";
-import React, { useState } from "react";
-import { BooksAndChapters } from "@/types/types";
+import type { BooksAndChapters } from "@/types/types";
 import PreviewLinkDownload from "./book-download-link";
 
 export default function PreviewBookPdf({
@@ -17,6 +18,7 @@ export default function PreviewBookPdf({
 }: {
   bookAndChapters: BooksAndChapters;
 }) {
+  const t = useTranslations("editBook");
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={() => setOpen(!open)}>
@@ -24,15 +26,12 @@ export default function PreviewBookPdf({
         onClick={() => setOpen((prev) => !prev)}
         className="border border-gray-800 rounded-md p-3"
       >
-        Preview PDF
+        {t("previewPdf")}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="my-5">Preview PDF</DialogTitle>
-          <DialogDescription>
-            Download a your PDF document from your book. Export it and
-            previsualize it in your favorite device.
-          </DialogDescription>
+          <DialogTitle className="my-5">{t("previewPdf")}</DialogTitle>
+          <DialogDescription>{t("previewPdfDescription")}</DialogDescription>
         </DialogHeader>
         <PreviewLinkDownload bookAndChapters={bookAndChapters} />
       </DialogContent>

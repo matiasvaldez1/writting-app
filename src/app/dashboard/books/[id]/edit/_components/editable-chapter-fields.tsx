@@ -2,6 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { CheckIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import {
   updateChapterDescription,
@@ -21,6 +22,7 @@ function EditableChaptersFields({
   };
   bookId: number;
 }) {
+  const t = useTranslations("editBook");
   const { toast } = useToast();
   const [, startTransition] = useTransition();
   const [editingTitle, setEditingTitle] = useState(false);
@@ -32,10 +34,10 @@ function EditableChaptersFields({
     startTransition(async () => {
       try {
         await updateChapterTitle(bookId, Number(chapter.id), title);
-        toast({ title: "Chapter title updated" });
+        toast({ title: t("chapterTitleUpdated") });
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "";
-        toast({ title: "Chapter title not updated", description: message });
+        toast({ title: t("chapterTitleNotUpdated"), description: message });
       }
     });
     setEditingTitle(false);
@@ -45,11 +47,11 @@ function EditableChaptersFields({
     startTransition(async () => {
       try {
         await updateChapterDescription(bookId, Number(chapter.id), description);
-        toast({ title: "Chapter description updated" });
+        toast({ title: t("chapterDescriptionUpdated") });
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "";
         toast({
-          title: "Chapter description not updated",
+          title: t("chapterDescriptionNotUpdated"),
           description: message,
         });
       }

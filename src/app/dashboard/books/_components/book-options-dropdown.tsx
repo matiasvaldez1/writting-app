@@ -1,6 +1,9 @@
 "use client";
 
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { useTranslations } from "next-intl";
+import { useTransition } from "react";
+import Link from "next/link";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,12 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { deleteBookAction } from "@/app/_actions/books";
 import { useToast } from "@/components/ui/use-toast";
-import { useTransition } from "react";
-import Link from "next/link";
 
 export default function BookOptionsDropdown({ bookId }: { bookId: number }) {
   const [, startTransition] = useTransition();
   const { toast } = useToast();
+  const t = useTranslations("books");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -23,7 +25,9 @@ export default function BookOptionsDropdown({ bookId }: { bookId: number }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <Link href={`/dashboard/books/${bookId}/edit`}>
-          <DropdownMenuItem className="cursor-pointer">Edit</DropdownMenuItem>
+          <DropdownMenuItem className="cursor-pointer">
+            {t("edit")}
+          </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -33,14 +37,13 @@ export default function BookOptionsDropdown({ bookId }: { bookId: number }) {
               deleteBookAction(bookId)
                 .then(() => {
                   toast({
-                    title: "Book deleted",
-                    description: "Your book has been removed",
+                    title: t("bookDeleted"),
+                    description: t("bookDeletedDescription"),
                   });
                 })
                 .catch((e) => {
-                  console.error("error", e);
                   toast({
-                    title: "Something went wrong",
+                    title: t("somethingWentWrong"),
                     description: e.message,
                     variant: "destructive",
                   });
@@ -48,7 +51,7 @@ export default function BookOptionsDropdown({ bookId }: { bookId: number }) {
             });
           }}
         >
-          Delete book
+          {t("deleteBook")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
