@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { getUserBookAndChapter } from "@/app/_actions/books";
 import PageHeading from "@/components/ui/page-header";
 import Tiptap from "@/app/dashboard/books/[id]/edit/[chapter_id]/editor/_components/custom-editor";
@@ -11,7 +11,7 @@ export default async function EditChapter({
   const { id: bookId, chapter_id: chapterId } = params;
   const integerBookId = Number(bookId);
   const integerChapterId = Number(chapterId);
-  const t = useTranslations("editor");
+  const t = await getTranslations("editor");
 
   const { bookAndChapter } = await getUserBookAndChapter(
     integerBookId,

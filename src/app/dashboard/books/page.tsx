@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { getUserBooks } from "@/app/_actions/books";
 import PageHeading from "@/components/ui/page-header";
 import CreateBookDialog from "./_components/create-book-dialog";
@@ -8,7 +8,7 @@ import BooksGrid from "./_components/books-grid";
 
 export default async function Books() {
   const { books } = await getUserBooks();
-  const t = useTranslations("books");
+  const t = await getTranslations("books");
 
   return (
     <div>

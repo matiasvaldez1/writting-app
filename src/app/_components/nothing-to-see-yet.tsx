@@ -1,11 +1,11 @@
 import { RocketIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
-export function NothingToSeeYet() {
-  const t = useTranslations("dashboard.welcome");
+export async function NothingToSeeYet() {
+  const t = await getTranslations("dashboard.welcome");
   return (
     <Alert className="flex justify-between p-8">
       <div className="flex gap-2">

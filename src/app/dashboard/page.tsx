@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import PageHeading from "@/components/ui/page-header";
 import { getUserAnalyticsAction } from "../_actions/books";
 import { SessionDurationChart } from "../_components/dashboard-charts";
@@ -6,7 +6,7 @@ import { NothingToSeeYet } from "../_components/nothing-to-see-yet";
 
 export default async function Dashboard() {
   const { userAnalytics } = await getUserAnalyticsAction();
-  const t = useTranslations("dashboard");
+  const t = await getTranslations("dashboard");
 
   if (userAnalytics.length === 0) {
     return <NothingToSeeYet />;

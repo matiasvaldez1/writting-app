@@ -2,7 +2,7 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { ModeToggle } from "@/components/theme-toggle";
 import { LocaleToggle } from "@/components/locale-toggle";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { capitalizeUsername } from "@/lib/utils";
 
 export default async function Header() {
   const user = await currentUser();
-  const t = useTranslations("common");
+  const t = await getTranslations("common");
   return (
     <div className="flex justify-between p-4 md:p-8">
       <div>
