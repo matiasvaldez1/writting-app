@@ -1,6 +1,5 @@
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
-import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ModeToggle } from "@/components/theme-toggle";
@@ -18,28 +17,16 @@ export default async function Header() {
         <div>
           <SignedIn>
             <Link href={"/dashboard"}>
-              <Image
-                src={"/writer-app-logo.png"}
-                alt={t("logoAlt")}
-                width={200}
-                height={50}
-                priority
-                className="w-[80px] sm:w-[120px] md:w-[200px] dark:invert"
-                style={{ width: "auto", height: "auto" }}
-              />
+              <span className="text-xl sm:text-2xl font-bold tracking-tight">
+                Escribí
+              </span>
             </Link>
           </SignedIn>
           <SignedOut>
             <Link href={"/"}>
-              <Image
-                src={"/writer-app-logo.png"}
-                alt={t("logoAlt")}
-                width={200}
-                height={50}
-                priority
-                className="w-[80px] sm:w-[120px] md:w-[200px] dark:invert"
-                style={{ width: "auto", height: "auto" }}
-              />
+              <span className="text-xl sm:text-2xl font-bold tracking-tight">
+                Escribí
+              </span>
             </Link>
           </SignedOut>
         </div>

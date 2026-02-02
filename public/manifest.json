@@ -1,7 +1,7 @@
 {
-  "name": "Writer App",
-  "short_name": "Writer",
-  "description": "A writing app to organize, write, and export your books and stories.",
+  "name": "Escribí",
+  "short_name": "Escribí",
+  "description": "Organizá, escribí y exportá tus libros e historias. Tu espacio para escribir sin distracciones.",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#ffffff",

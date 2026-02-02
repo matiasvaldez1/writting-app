@@ -15,7 +15,7 @@ function getLocaleFromAcceptLanguage(header: string): Locale {
   for (const lang of preferred) {
     if (isSupported(lang)) return lang;
   }
-  return "en";
+  return "es";
 }
 
 export default getRequestConfig(async () => {
@@ -23,7 +23,7 @@ export default getRequestConfig(async () => {
   const headerStore = headers();
 
   const cookieLocale = cookieStore.get("locale")?.value;
-  let locale: Locale = "en";
+  let locale: Locale = "es";
 
   if (cookieLocale && isSupported(cookieLocale)) {
     locale = cookieLocale;

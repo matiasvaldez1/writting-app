@@ -3,17 +3,17 @@
     "signIn": "Sign in",
     "signUp": "Sign up",
     "logIn": "Log in",
-    "logoAlt": "Writer app logo"
+    "logoAlt": "Escribí logo"
   },
   "landing": {
-    "heroTitle": "Write, Organize, Publish: Your Complete Writing Companion!",
-    "heroDescription": "Looking to unleash your creativity and bring your writing projects to life? Look no further than our Writing App! With our user-friendly platform, you can seamlessly organize all your writings in one place.",
+    "heroTitle": "Write, Organize, and Publish Your Stories",
+    "heroDescription": "Looking to unleash your creativity and bring your writing projects to life? With Escribí, you can seamlessly organize all your writings in one place.",
     "getStarted": "Get started",
     "goToDashboard": "Go to Dashboard",
     "readMore": "Read more",
-    "quote": "\"The scariest moment is always just before you start.\" - Stephen King",
+    "quote": "\"Let others pride themselves on how many pages they have written; I'd rather boast about the ones I've read.\" — Jorge Luis Borges",
     "animText": "Shall we begin writing?",
-    "ctaTitle": "Sign up to start using all the functionalities from our writing app!",
+    "ctaTitle": "Sign up to start using all the features of Escribí!",
     "ctaAlreadyHaveAccount": "Already have an account?",
     "featureEditTitle": "Edit Your Book",
     "featureEditText": "You will be able to edit your book with a bunch of different options in our built in - easy to use text editor.",
@@ -33,7 +33,7 @@
   "dashboard": {
     "title": "Dashboard",
     "welcome": {
-      "title": "Welcome to the ultimate Writing App!",
+      "title": "Welcome to Escribí!",
       "description": "You are all set up. Start writing and see your analytics on this page!",
       "cta": "Begin writing!"
     },

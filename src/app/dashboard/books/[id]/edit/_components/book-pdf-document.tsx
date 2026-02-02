@@ -65,6 +65,20 @@ const htmlStylesheet = {
   },
 } as Record<string, Record<string, string | number>>;
 
+function proxyImageUrls(html: string): string {
+  if (!html) return html;
+  return html.replace(
+    /<img([^>]*?)src="([^"]+)"([^>]*?)>/gi,
+    (_match, before: string, src: string, after: string) => {
+      if (src.startsWith("data:") || src.startsWith("/api/image-proxy")) {
+        return `<img${before}src="${src}"${after}>`;
+      }
+      const proxied = `/api/image-proxy?url=${encodeURIComponent(src)}`;
+      return `<img${before}src="${proxied}"${after}>`;
+    }
+  );
+}
+
 export default function PdfDocumentFromBook({
   bookAndChapters,
 }: {
@@ -82,7 +96,7 @@ export default function PdfDocumentFromBook({
           </View>
           <View style={styles.section} wrap>
             <Html style={{ fontSize: 12 }} stylesheet={htmlStylesheet}>
-              {chapter.chapterText}
+              {proxyImageUrls(chapter.chapterText)}
             </Html>
           </View>
         </Page>

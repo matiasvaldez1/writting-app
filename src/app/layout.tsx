@@ -13,20 +13,20 @@ import LayoutShell from "@/components/layout-shell";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Writer App",
+  title: "Escribí — Tu espacio para escribir",
   description:
-    "A writing app to organize, write, and export your books and stories.",
+    "Organizá, escribí y exportá tus libros e historias. Tu espacio para escribir sin distracciones.",
   openGraph: {
-    title: "Writer App",
+    title: "Escribí — Tu espacio para escribir",
     description:
-      "A writing app to organize, write, and export your books and stories.",
+      "Organizá, escribí y exportá tus libros e historias. Tu espacio para escribir sin distracciones.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Writer App",
+    title: "Escribí — Tu espacio para escribir",
     description:
-      "A writing app to organize, write, and export your books and stories.",
+      "Organizá, escribí y exportá tus libros e historias. Tu espacio para escribir sin distracciones.",
   },
 };
 
@@ -50,7 +50,7 @@ export default async function RootLayout({
             name="apple-mobile-web-app-status-bar-style"
             content="default"
           />
-          <meta name="apple-mobile-web-app-title" content="Writer App" />
+          <meta name="apple-mobile-web-app-title" content="Escribí" />
           <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         </head>
         <body className={inter.className} suppressHydrationWarning>

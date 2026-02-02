@@ -1,26 +1,26 @@
 {
   "common": {
-    "signIn": "Iniciar sesión",
+    "signIn": "Ingresar",
     "signUp": "Registrarse",
     "logIn": "Ingresar",
-    "logoAlt": "Logo de Writer App"
+    "logoAlt": "Logo de Escribí"
   },
   "landing": {
-    "heroTitle": "Escribe, Organiza, Publica: ¡Tu compañero de escritura completo!",
-    "heroDescription": "¿Buscas liberar tu creatividad y dar vida a tus proyectos de escritura? ¡No busques más! Con nuestra plataforma fácil de usar, puedes organizar todas tus escrituras en un solo lugar.",
-    "getStarted": "Comenzar",
+    "heroTitle": "Escribí, organizá y publicá tus historias",
+    "heroDescription": "Tu espacio para darle forma a lo que tenés en la cabeza. Organizá todos tus escritos en un solo lugar, sin complicaciones.",
+    "getStarted": "Empezar",
     "goToDashboard": "Ir al panel",
     "readMore": "Leer más",
-    "quote": "\"El momento más aterrador es siempre justo antes de empezar.\" - Stephen King",
-    "animText": "¿Comenzamos a escribir?",
-    "ctaTitle": "¡Regístrate para comenzar a usar todas las funcionalidades de nuestra app de escritura!",
-    "ctaAlreadyHaveAccount": "¿Ya tienes una cuenta?",
-    "featureEditTitle": "Edita tu libro",
-    "featureEditText": "Podrás editar tu libro con muchas opciones diferentes en nuestro editor de texto integrado, fácil de usar.",
-    "featureManageTitle": "Administra capítulos",
-    "featureManageText": "Puedes administrar fácilmente el orden de tus libros simplemente arrastrándolos, cambiando su orden, renombrando sus títulos o descripciones.",
-    "featureExportTitle": "Exportar como PDF",
-    "featureExportText": "Cuando termines de escribir tu libro, puedes hacer clic en la sección Generar PDF y esto generará un PDF descargable para que puedas visualizar fácilmente tu borrador."
+    "quote": "\"Que otros se jacten de las páginas que han escrito; a mí me enorgullecen las que he leído.\" — Jorge Luis Borges",
+    "animText": "¿Empezamos a escribir?",
+    "ctaTitle": "Creá tu cuenta y empezá a usar todas las herramientas de Escribí",
+    "ctaAlreadyHaveAccount": "¿Ya tenés cuenta?",
+    "featureEditTitle": "Editá tu libro",
+    "featureEditText": "Usá nuestro editor de texto integrado para darle forma a tu libro. Tenés un montón de opciones de formato, fácil y rápido.",
+    "featureManageTitle": "Organizá tus capítulos",
+    "featureManageText": "Arrastrá y soltá para reordenar capítulos, cambiales el título o la descripción. Todo al toque.",
+    "featureExportTitle": "Exportá como PDF",
+    "featureExportText": "Cuando termines de escribir, generá un PDF descargable para visualizar tu borrador completo con todo el formato."
   },
   "footer": {
     "howItWorks": "Cómo funciona",
@@ -33,15 +33,15 @@
   "dashboard": {
     "title": "Panel",
     "welcome": {
-      "title": "¡Bienvenido a la aplicación de escritura definitiva!",
-      "description": "Ya está todo listo. ¡Empieza a escribir y mira tus estadísticas en esta página!",
-      "cta": "¡Comenzar a escribir!"
+      "title": "¡Bienvenido a Escribí!",
+      "description": "Ya está todo listo. ¡Empezá a escribir y mirá tus estadísticas acá!",
+      "cta": "¡Empezar a escribir!"
     },
     "sidebar": {
       "dashboard": "Panel",
       "books": "Libros"
     },
-    "offlineBanner": "Estás sin conexión. Los cambios se guardarán localmente y se sincronizarán cuando te reconectes.",
+    "offlineBanner": "Estás sin conexión. Los cambios se guardan localmente y se sincronizan cuando te reconectes.",
     "stats": {
       "totalBooks": "Libros",
       "totalChapters": "Capítulos",
@@ -62,12 +62,12 @@
     "nameAZ": "Nombre (A-Z)",
     "mostChapters": "Más capítulos",
     "noMatch": "Ningún libro coincide con tu búsqueda.",
-    "noBooks": "No hay libros creados aún.",
+    "noBooks": "No hay libros creados todavía.",
     "chapters": "{count} capítulos",
     "edit": "Editar",
     "deleteBook": "Eliminar libro",
     "bookDeleted": "Libro eliminado",
-    "bookDeletedDescription": "Tu libro ha sido eliminado",
+    "bookDeletedDescription": "Tu libro fue eliminado",
     "somethingWentWrong": "Algo salió mal"
   },
   "createBook": {
@@ -75,7 +75,7 @@
     "title": "Crear libro",
     "bookName": "Nombre del libro",
     "bookDescription": "Descripción del libro",
-    "chaptersQuestion": "¿Sabes cuántos capítulos tendrá tu libro?",
+    "chaptersQuestion": "¿Sabés cuántos capítulos va a tener tu libro?",
     "amountOfChapters": "Cantidad de capítulos",
     "saving": "Guardando...",
     "save": "Guardar",
@@ -83,7 +83,7 @@
   },
   "editBook": {
     "previewPdf": "Vista previa PDF",
-    "previewPdfDescription": "Previsualiza tu libro como PDF. También puedes descargarlo para lectura sin conexión.",
+    "previewPdfDescription": "Previsualizá tu libro como PDF. También podés descargarlo para leerlo sin conexión.",
     "loading": "Cargando documento...",
     "download": "¡Descargar ahora!",
     "addChapter": "Agregar capítulo",
@@ -105,8 +105,8 @@
   },
   "editor": {
     "editChapter": "Editar capítulo N°{number}: {title}",
-    "startWriting": "Comienza a escribir...",
-    "placeholderEmpty": "Comienza a escribir, o presiona + en una línea vacía para encabezados, listas, imágenes...",
+    "startWriting": "Empezá a escribir...",
+    "placeholderEmpty": "Empezá a escribir, o presioná + en una línea vacía para encabezados, listas, imágenes...",
     "words": "{count} palabras",
     "pages": "{count} páginas",
     "characters": "{count} caracteres",
@@ -162,7 +162,7 @@
   "help": {
     "title": "Ayuda de escritura",
     "writingBasics": "Conceptos básicos",
-    "writingBasicsContent": "Tu trabajo se guarda automáticamente cada 2 segundos. Selecciona texto para formatearlo con la barra de herramientas flotante. Escribe en una línea vacía y haz clic en + para agregar bloques como encabezados, listas e imágenes.",
+    "writingBasicsContent": "Tu trabajo se guarda automáticamente cada 2 segundos. Seleccioná texto para formatearlo con la barra flotante. Escribí en una línea vacía y hacé clic en + para agregar bloques como encabezados, listas e imágenes.",
     "keyboardShortcuts": "Atajos de teclado",
     "bold": "Negrita",
     "italic": "Cursiva",
@@ -170,11 +170,11 @@
     "undo": "Deshacer",
     "redo": "Rehacer",
     "chapterManagement": "Gestión de capítulos",
-    "chapterManagementContent": "Arrastra y suelta capítulos para reordenarlos. Haz clic en el ícono de lápiz para renombrar títulos y descripciones. Usa el ícono de papelera para eliminar capítulos.",
+    "chapterManagementContent": "Arrastrá y soltá capítulos para reordenarlos. Hacé clic en el ícono de lápiz para renombrar títulos y descripciones. Usá el ícono de papelera para eliminar capítulos.",
     "pdfExport": "Exportar PDF",
-    "pdfExportContent": "Haz clic en 'Vista previa PDF' en la página de edición del libro para generar y descargar un PDF con todos tus capítulos y formato preservado.",
+    "pdfExportContent": "Hacé clic en 'Vista previa PDF' en la página de edición del libro para generar y descargar un PDF con todos tus capítulos y formato.",
     "aiWriting": "Escritura con IA",
-    "aiWritingContent": "Presiona Ctrl+Shift+Espacio o haz clic en el botón de IA en el menú flotante para que la IA continúe escribiendo desde donde lo dejaste. Se adapta a tu tono y estilo automáticamente.",
+    "aiWritingContent": "Presioná Ctrl+Shift+Espacio o hacé clic en el botón de IA en el menú flotante para que la IA siga escribiendo desde donde lo dejaste. Se adapta a tu tono y estilo automáticamente.",
     "save": "Guardar",
     "aiContinueShortcut": "Continuar con IA",
     "gotIt": "¡Entendido!"
