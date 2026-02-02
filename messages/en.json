@@ -151,7 +151,9 @@
       "prevChapter": "Previous chapter",
       "nextChapter": "Next chapter",
       "aiContinue": "Continue with AI",
-      "jumpToChapter": "Jump to chapter"
+      "jumpToChapter": "Jump to chapter",
+      "addBlock": "Add block",
+      "help": "Help"
     }
   },
   "theme": {
@@ -187,6 +189,10 @@
     "complexWords": "Complex Words",
     "sentences": "Sentences",
     "syllables": "Syllables"
+  },
+  "error": {
+    "somethingWentWrong": "Something went wrong!",
+    "tryAgain": "Try again"
   },
   "locale": {
     "en": "EN",

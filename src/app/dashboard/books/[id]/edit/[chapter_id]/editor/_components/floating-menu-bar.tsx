@@ -80,7 +80,7 @@ export default function FloatingMenuBar({
               "p-1 rounded-full border bg-background shadow-md hover:bg-accent transition-colors",
               showPulse && "animate-pulse"
             )}
-            title="Add block"
+            title={t("addBlock")}
           >
             <PlusIcon className="h-5 w-5" />
           </button>

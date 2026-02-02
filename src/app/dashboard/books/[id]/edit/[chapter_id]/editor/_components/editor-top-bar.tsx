@@ -278,7 +278,7 @@ export default function EditorTopBar({
 
         <ReadabilityPanel text={textContent} />
 
-        <TopBarButton onClick={onHelpOpen} title="Help">
+        <TopBarButton onClick={onHelpOpen} title={tt("help")}>
           <QuestionMarkCircledIcon className={iconSize} />
         </TopBarButton>
 

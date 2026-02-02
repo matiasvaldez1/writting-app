@@ -86,7 +86,7 @@ export default function BooksGrid({ books }: { books: Book[] }) {
         {books.length === 0 && !search && <h2>{t("noBooks")}</h2>}
         {books.map((book) => (
           <div className="flex justify-start mb-4" key={book.id}>
-            <div className="w-full max-w-sm border border-border bg-card rounded-xl p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200 flex flex-col gap-3">
+            <div className="w-full max-w-sm border border-border bg-card rounded-xl p-3 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200 flex flex-col gap-3">
               <div className="flex justify-between items-start gap-2">
                 <h2 className="text-xl font-semibold truncate">
                   {book.bookName}
@@ -98,7 +98,7 @@ export default function BooksGrid({ books }: { books: Book[] }) {
                   <BookImageByTheme />
                 </div>
               </Link>
-              <p className="text-muted-foreground line-clamp-2">
+              <p className="text-muted-foreground line-clamp-4">
                 {book.bookDescription}
               </p>
               {Boolean(book.amountOfChapters) && (

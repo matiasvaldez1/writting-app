@@ -151,7 +151,9 @@
       "prevChapter": "Capítulo anterior",
       "nextChapter": "Capítulo siguiente",
       "aiContinue": "Continuar con IA",
-      "jumpToChapter": "Ir al capítulo"
+      "jumpToChapter": "Ir al capítulo",
+      "addBlock": "Agregar bloque",
+      "help": "Ayuda"
     }
   },
   "theme": {
@@ -187,6 +189,10 @@
     "complexWords": "Palabras complejas",
     "sentences": "Oraciones",
     "syllables": "Sílabas"
+  },
+  "error": {
+    "somethingWentWrong": "¡Algo salió mal!",
+    "tryAgain": "Reintentar"
   },
   "locale": {
     "en": "EN",
