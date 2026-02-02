@@ -42,6 +42,8 @@ export function HelpDialog({
     { key: "Ctrl+U", label: t("underline") },
     { key: "Ctrl+Z", label: t("undo") },
     { key: "Ctrl+Shift+Z", label: t("redo") },
+    { key: "Ctrl+S", label: t("save") },
+    { key: "Ctrl+Shift+Space", label: t("aiContinueShortcut") },
   ];
 
   return (
@@ -90,6 +92,15 @@ export function HelpDialog({
             <h3 className="font-semibold mb-1">{t("pdfExport")}</h3>
             <p className="text-sm text-muted-foreground">
               {t("pdfExportContent")}
+            </p>
+          </section>
+
+          <Separator />
+
+          <section>
+            <h3 className="font-semibold mb-1">{t("aiWriting")}</h3>
+            <p className="text-sm text-muted-foreground">
+              {t("aiWritingContent")}
             </p>
           </section>
 

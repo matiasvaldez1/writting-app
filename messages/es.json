@@ -173,6 +173,10 @@
     "chapterManagementContent": "Arrastra y suelta capítulos para reordenarlos. Haz clic en el ícono de lápiz para renombrar títulos y descripciones. Usa el ícono de papelera para eliminar capítulos.",
     "pdfExport": "Exportar PDF",
     "pdfExportContent": "Haz clic en 'Vista previa PDF' en la página de edición del libro para generar y descargar un PDF con todos tus capítulos y formato preservado.",
+    "aiWriting": "Escritura con IA",
+    "aiWritingContent": "Presiona Ctrl+Shift+Espacio o haz clic en el botón de IA en el menú flotante para que la IA continúe escribiendo desde donde lo dejaste. Se adapta a tu tono y estilo automáticamente.",
+    "save": "Guardar",
+    "aiContinueShortcut": "Continuar con IA",
     "gotIt": "¡Entendido!"
   },
   "readability": {

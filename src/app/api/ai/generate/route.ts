@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
 
   const stream = await anthropic.messages.stream({
     model,
-    max_tokens: 2048,
+    max_tokens: 512,
     system: systemPrompt,
     messages: [{ role: "user", content: userMessage }],
   });

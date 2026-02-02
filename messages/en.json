@@ -173,6 +173,10 @@
     "chapterManagementContent": "Drag and drop chapters to reorder them. Click the pencil icon to rename titles and descriptions. Use the trash icon to delete chapters.",
     "pdfExport": "PDF Export",
     "pdfExportContent": "Click 'Preview PDF' on the book edit page to generate and download a PDF with all your chapters and formatting preserved.",
+    "aiWriting": "AI Writing",
+    "aiWritingContent": "Press Ctrl+Shift+Space or click the AI button on the floating menu to let AI continue writing from where you left off. It matches your tone and style automatically.",
+    "save": "Save",
+    "aiContinueShortcut": "AI continue",
     "gotIt": "Got it!"
   },
   "readability": {
