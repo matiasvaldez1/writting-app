@@ -7,8 +7,9 @@ import {
   DividerHorizontalIcon,
   ImageIcon,
   PlusIcon,
+  MagicWandIcon,
 } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import ImageDialog from "./image-dialog";
@@ -38,11 +39,26 @@ function FloatingButton({
   );
 }
 
-export default function FloatingMenuBar({ editor }: { editor: Editor }) {
+export default function FloatingMenuBar({
+  editor,
+  onAIContinue,
+  isAIGenerating,
+}: {
+  editor: Editor;
+  onAIContinue: () => void;
+  isAIGenerating: boolean;
+}) {
   const t = useTranslations("editor.toolbar");
   const [isExpanded, setIsExpanded] = useState(false);
   const [imageDialogOpen, setImageDialogOpen] = useState(false);
+  const [showPulse, setShowPulse] = useState(false);
   const iconSize = "h-4 w-4";
+
+  useEffect(() => {
+    if (!localStorage.getItem("hasUsedFloatingMenu")) {
+      setShowPulse(true);
+    }
+  }, []);
 
   return (
     <>
@@ -53,8 +69,17 @@ export default function FloatingMenuBar({ editor }: { editor: Editor }) {
       >
         {!isExpanded ? (
           <button
-            onClick={() => setIsExpanded(true)}
-            className="p-1 rounded-full border bg-background shadow-md hover:bg-accent transition-colors"
+            onClick={() => {
+              setIsExpanded(true);
+              if (showPulse) {
+                localStorage.setItem("hasUsedFloatingMenu", "true");
+                setShowPulse(false);
+              }
+            }}
+            className={cn(
+              "p-1 rounded-full border bg-background shadow-md hover:bg-accent transition-colors",
+              showPulse && "animate-pulse"
+            )}
             title="Add block"
           >
             <PlusIcon className="h-5 w-5" />
@@ -148,6 +173,19 @@ export default function FloatingMenuBar({ editor }: { editor: Editor }) {
               title={t("horizontalRule")}
             >
               <DividerHorizontalIcon className={iconSize} />
+            </FloatingButton>
+            <FloatingButton
+              onClick={() => {
+                onAIContinue();
+                setIsExpanded(false);
+              }}
+              title={t("aiContinue")}
+            >
+              {isAIGenerating ? (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent inline-block" />
+              ) : (
+                <MagicWandIcon className={iconSize} />
+              )}
             </FloatingButton>
           </div>
         )}

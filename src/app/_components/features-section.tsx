@@ -20,16 +20,18 @@ export default function FeaturesSection({
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="w-full md:w-1/2 p-8"
+        className="w-full md:w-1/2 p-8 max-w-xl mx-auto"
       >
         <h2 className="text-4xl font-bold mb-4">{title}</h2>
-        <p className="leading-7 text-sm xl:text-xl mt-6">{text}</p>
+        <p className="leading-7 text-base xl:text-lg mt-6 text-muted-foreground">
+          {text}
+        </p>
       </motion.div>
       <div className="w-full md:w-1/2 p-8">
         <motion.img
           src={image}
           alt="Section Image"
-          className="w-full min-h-80"
+          className="w-full rounded-xl shadow-lg"
           initial={{ opacity: 0, x: reversed ? 150 : -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}

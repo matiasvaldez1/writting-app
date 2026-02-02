@@ -21,7 +21,7 @@ export default function BookOptionsDropdown({ bookId }: { bookId: number }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <DotsHorizontalIcon className="h-8 w-8" />
+        <DotsHorizontalIcon className="h-5 w-5 text-muted-foreground hover:text-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <Link href={`/dashboard/books/${bookId}/edit`}>
@@ -31,7 +31,7 @@ export default function BookOptionsDropdown({ bookId }: { bookId: number }) {
         </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="cursor-pointer text-red-500"
+          className="cursor-pointer text-destructive"
           onClick={async () => {
             startTransition(() => {
               deleteBookAction(bookId)

@@ -9,6 +9,7 @@
     "heroTitle": "Write, Organize, Publish: Your Complete Writing Companion!",
     "heroDescription": "Looking to unleash your creativity and bring your writing projects to life? Look no further than our Writing App! With our user-friendly platform, you can seamlessly organize all your writings in one place.",
     "getStarted": "Get started",
+    "goToDashboard": "Go to Dashboard",
     "readMore": "Read more",
     "quote": "\"The scariest moment is always just before you start.\" - Stephen King",
     "animText": "Shall we begin writing?",
@@ -39,6 +40,15 @@
     "sidebar": {
       "dashboard": "Dashboard",
       "books": "Books"
+    },
+    "offlineBanner": "You are offline. Changes will be saved locally and synced when you reconnect.",
+    "stats": {
+      "totalBooks": "Books",
+      "totalChapters": "Chapters",
+      "writingSessions": "Sessions",
+      "totalPages": "Pages",
+      "totalWritingTime": "Writing time",
+      "minutes": "{count} min"
     },
     "chart": {
       "sessionDuration": "Duration of each session in minutes"
@@ -73,7 +83,7 @@
   },
   "editBook": {
     "previewPdf": "Preview PDF",
-    "previewPdfDescription": "Download a your PDF document from your book. Export it and previsualize it in your favorite device.",
+    "previewPdfDescription": "Preview your book as a PDF. You can also download it for offline reading.",
     "loading": "Loading document...",
     "download": "Download now!",
     "addChapter": "Add chapter",
@@ -89,15 +99,24 @@
     "chapterTitleUpdated": "Chapter title updated",
     "chapterTitleNotUpdated": "Chapter title not updated",
     "chapterDescriptionUpdated": "Chapter description updated",
-    "chapterDescriptionNotUpdated": "Chapter description not updated"
+    "chapterDescriptionNotUpdated": "Chapter description not updated",
+    "words": "words",
+    "pages": "pages"
   },
   "editor": {
     "editChapter": "Edit chapter N°{number}: {title}",
     "startWriting": "Start writing...",
+    "placeholderEmpty": "Start writing, or press + on a new line for headings, lists, images...",
     "words": "{count} words",
+    "pages": "{count} pages",
     "characters": "{count} characters",
     "saving": "Saving...",
     "saved": "Saved",
+    "savedLocally": "Saved locally",
+    "saveFailed": "Save failed",
+    "retry": "Retry",
+    "offline": "Offline",
+    "aiGenerating": "AI writing...",
     "toolbar": {
       "bold": "Bold (Ctrl+B)",
       "italic": "Italic (Ctrl+I)",
@@ -128,7 +147,11 @@
       "imageUrl": "Image URL",
       "imageInsert": "Insert",
       "colorReset": "Reset color",
-      "back": "Back"
+      "back": "Back",
+      "prevChapter": "Previous chapter",
+      "nextChapter": "Next chapter",
+      "aiContinue": "Continue with AI",
+      "jumpToChapter": "Jump to chapter"
     }
   },
   "theme": {
@@ -151,6 +174,15 @@
     "pdfExport": "PDF Export",
     "pdfExportContent": "Click 'Preview PDF' on the book edit page to generate and download a PDF with all your chapters and formatting preserved.",
     "gotIt": "Got it!"
+  },
+  "readability": {
+    "title": "Readability",
+    "gradeLevel": "Grade Level",
+    "avgSentenceLength": "Avg. Sentence Length",
+    "avgWordLength": "Avg. Word Length",
+    "complexWords": "Complex Words",
+    "sentences": "Sentences",
+    "syllables": "Syllables"
   },
   "locale": {
     "en": "EN",

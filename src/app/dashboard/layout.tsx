@@ -12,6 +12,12 @@ import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { LoadingSpinner } from "@/components/ui/loading";
 import { Button } from "@/components/ui/button";
+import OfflineBanner from "@/components/offline-banner";
+
+const navItems = [
+  { href: "/dashboard", icon: HomeIcon, labelKey: "dashboard" as const },
+  { href: "/dashboard/books", icon: ReaderIcon, labelKey: "books" as const },
+];
 
 export default function DashboardLayout({
   children,
@@ -20,16 +26,14 @@ export default function DashboardLayout({
 }>) {
   const pathname = usePathname();
   const t = useTranslations("dashboard.sidebar");
-  const defaulClosedPath = pathname.includes("editor");
+  const isEditor = pathname.includes("editor");
   const [hasMounted, setHasMounted] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(
-    defaulClosedPath ? false : true
-  );
+  const [isSidebarOpen, setIsSidebarOpen] = useState(!isEditor);
 
   useEffect(() => {
-    if (defaulClosedPath) {
+    if (isEditor) {
       setHasMounted(true);
-      setIsSidebarOpen(defaulClosedPath ? false : true);
+      setIsSidebarOpen(false);
       return;
     }
     const storedValue = localStorage.getItem("sidebarOpen");
@@ -37,7 +41,7 @@ export default function DashboardLayout({
       setIsSidebarOpen(JSON.parse(storedValue));
     }
     setHasMounted(true);
-  }, [defaulClosedPath]);
+  }, [isEditor]);
 
   useEffect(() => {
     if (hasMounted) {
@@ -50,69 +54,78 @@ export default function DashboardLayout({
     setIsSidebarOpen((prevState) => !prevState);
   };
 
+  const isActive = (href: string) => {
+    if (href === "/dashboard") return pathname === "/dashboard";
+    return pathname.startsWith(href);
+  };
+
   if (!hasMounted) return <LoadingSpinner className="mx-auto mt-[30svh]" />;
 
+  if (isEditor) {
+    return (
+      <div className="min-h-svh">
+        <OfflineBanner />
+        {children}
+      </div>
+    );
+  }
+
   return (
-    <div className="flex p-4 md:p-8 lg:p-12 gap-6 min-h-[80svh]">
-      {isSidebarOpen && (
-        <aside className="hidden lg:flex flex-col gap-10 border border-l-0 border-t-0 border-b-0 border-gray-200 relative group transition duration-300 ease-in-out">
-          <div>
-            <Link className="p-4" href={"/dashboard"}>
-              <Button className="text-xl" size={"lg"} variant="link">
-                <HomeIcon className="h-4 w-4" /> &nbsp; {t("dashboard")}
-              </Button>
-            </Link>
+    <>
+      <OfflineBanner />
+      <div className="flex min-h-[80svh]">
+        <aside
+          className={`hidden lg:flex flex-col bg-card border-r border-border transition-all duration-200 ${isSidebarOpen ? "w-56" : "w-14"}`}
+        >
+          <nav className="flex flex-col gap-1 p-2 flex-1">
+            {navItems.map((item) => (
+              <Link key={item.href} href={item.href}>
+                <span
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-md font-medium transition-colors ${
+                    isActive(item.href)
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                  }`}
+                >
+                  <item.icon className="h-5 w-5 shrink-0" />
+                  {isSidebarOpen && <span>{t(item.labelKey)}</span>}
+                </span>
+              </Link>
+            ))}
+          </nav>
+          <div className="p-2 border-t border-border">
+            <Button
+              onClick={toggleSidebar}
+              variant="ghost"
+              size="icon"
+              className="w-full flex justify-center"
+            >
+              {isSidebarOpen ? (
+                <ChevronLeftIcon className="h-5 w-5" />
+              ) : (
+                <ChevronRightIcon className="h-5 w-5" />
+              )}
+            </Button>
           </div>
-          <div>
-            <Link className="p-4" href={"/dashboard/books"}>
-              <Button className="text-xl" size={"lg"} variant="link">
-                <ReaderIcon className="h-4 w-4" /> &nbsp; {t("books")}
-              </Button>
-            </Link>
-          </div>
-          <Button
-            onClick={toggleSidebar}
-            className="absolute right-[-10%] bottom-[50%] hidden group-hover:block rounded-full"
-            variant={"outline"}
-          >
-            {isSidebarOpen ? (
-              <ChevronLeftIcon className="h-4 w-4" />
-            ) : (
-              <ChevronRightIcon className="h-4 w-4" />
-            )}
-          </Button>
         </aside>
-      )}
-      {!isSidebarOpen && (
-        <aside className="hidden lg:flex flex-col gap-10 border border-l-0 border-t-0 border-b-0 border-gray-200 relative group">
-          <div>
-            <Link href={"/dashboard"}>
-              <Button className="text-xl" variant="link">
-                <HomeIcon className="h-4 w-4" />
-              </Button>
+        <div className="flex-1 p-4 md:p-8 lg:p-12 pb-20 lg:pb-12">
+          {children}
+        </div>
+        <nav className="fixed bottom-0 left-0 right-0 z-50 flex lg:hidden border-t border-border bg-background/95 backdrop-blur-sm">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex-1 flex flex-col items-center gap-1 py-3 text-sm font-medium transition-colors ${
+                isActive(item.href) ? "text-primary" : "text-muted-foreground"
+              }`}
+            >
+              <item.icon className="h-5 w-5" />
+              <span>{t(item.labelKey)}</span>
             </Link>
-          </div>
-          <div>
-            <Link href={"/dashboard/books"}>
-              <Button className="text-xl" variant="link">
-                <ReaderIcon className="h-4 w-4" />
-              </Button>
-            </Link>
-          </div>
-          <Button
-            onClick={toggleSidebar}
-            className="absolute right-[-50%] bottom-[50%] hidden group-hover:block rounded-full"
-            variant={"outline"}
-          >
-            {isSidebarOpen ? (
-              <ChevronLeftIcon className="h-4 w-4" />
-            ) : (
-              <ChevronRightIcon className="h-4 w-4" />
-            )}
-          </Button>
-        </aside>
-      )}
-      <div className="w-full">{children}</div>
-    </div>
+          ))}
+        </nav>
+      </div>
+    </>
   );
 }

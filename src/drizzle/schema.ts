@@ -18,7 +18,7 @@ export const UsersTable = pgTable(
   "users",
   {
     id: serial("id").primaryKey(),
-    clerkId: text("clerkId"),
+    clerkId: text("clerkId").notNull().unique(),
     name: text("name").notNull(),
     email: text("email").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -26,6 +26,7 @@ export const UsersTable = pgTable(
   (users) => {
     return {
       uniqueIdx: uniqueIndex("unique_idx").on(users.email),
+      clerkIdIdx: uniqueIndex("clerkId_unique_idx").on(users.clerkId),
     };
   }
 );
@@ -76,7 +77,7 @@ export const UserAnalyticsTable = pgTable(
     userId: integer("userId")
       .notNull()
       .references(() => UsersTable.id, { onDelete: "cascade" }),
-    type: AnalyticsTypeEnum("analitycs_type").notNull(),
+    type: AnalyticsTypeEnum("analytics_type").notNull(),
     value: integer("value").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
   },

@@ -10,6 +10,7 @@ import {
   createBookUseCase,
   deleteBookUseCase,
   deleteChapterUseCase,
+  getAllUserChapterTextsUseCase,
   getUserBookAndChapterUseCase,
   getUserBookAndChaptersUseCase,
   getUserBooksUseCase,
@@ -53,9 +54,21 @@ export async function deleteBookAction(bookId: number) {
   }
 }
 
-export async function getUserBooks() {
+export async function getUserBooks(params?: {
+  search?: string;
+  sort?: string;
+}) {
   const user = await getUserByClerkIdUseCase();
-  const books = await getUserBooksUseCase({ userId: user.userId });
+  const sort = (params?.sort || "newest") as
+    | "newest"
+    | "oldest"
+    | "name"
+    | "chapters";
+  const books = await getUserBooksUseCase({
+    userId: user.id,
+    search: params?.search,
+    sort,
+  });
   return { status: "success", books };
 }
 
@@ -139,11 +152,24 @@ export async function addWritingSession(
   return { status: "success", writingSession };
 }
 
+export async function getAllUserChapterTextsAction() {
+  const user = await getUserByClerkIdUseCase();
+  const texts = await getAllUserChapterTextsUseCase({ userId: user.id });
+  return { status: "success", texts };
+}
+
 export async function getUserAnalyticsAction() {
   const user = await getUserByClerkIdUseCase();
-  const userAnalytics = await getUserAnalytics({ userId: user.id });
-  revalidatePath("/dashboard");
-  return { status: "success", userAnalytics };
+  try {
+    const userAnalytics = await getUserAnalytics({ userId: user.id });
+    revalidatePath("/dashboard");
+    return { status: "success", userAnalytics };
+  } catch (_) {
+    return {
+      status: "success",
+      userAnalytics: [] as Awaited<ReturnType<typeof getUserAnalytics>>,
+    };
+  }
 }
 
 export async function addChapterAction(bookId: number) {

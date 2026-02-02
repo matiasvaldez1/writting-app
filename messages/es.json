@@ -9,6 +9,7 @@
     "heroTitle": "Escribe, Organiza, Publica: ¡Tu compañero de escritura completo!",
     "heroDescription": "¿Buscas liberar tu creatividad y dar vida a tus proyectos de escritura? ¡No busques más! Con nuestra plataforma fácil de usar, puedes organizar todas tus escrituras en un solo lugar.",
     "getStarted": "Comenzar",
+    "goToDashboard": "Ir al panel",
     "readMore": "Leer más",
     "quote": "\"El momento más aterrador es siempre justo antes de empezar.\" - Stephen King",
     "animText": "¿Comenzamos a escribir?",
@@ -39,6 +40,15 @@
     "sidebar": {
       "dashboard": "Panel",
       "books": "Libros"
+    },
+    "offlineBanner": "Estás sin conexión. Los cambios se guardarán localmente y se sincronizarán cuando te reconectes.",
+    "stats": {
+      "totalBooks": "Libros",
+      "totalChapters": "Capítulos",
+      "writingSessions": "Sesiones",
+      "totalPages": "Páginas",
+      "totalWritingTime": "Tiempo de escritura",
+      "minutes": "{count} min"
     },
     "chart": {
       "sessionDuration": "Duración de cada sesión en minutos"
@@ -73,7 +83,7 @@
   },
   "editBook": {
     "previewPdf": "Vista previa PDF",
-    "previewPdfDescription": "Descarga el documento PDF de tu libro. Expórtalo y previsualízalo en tu dispositivo favorito.",
+    "previewPdfDescription": "Previsualiza tu libro como PDF. También puedes descargarlo para lectura sin conexión.",
     "loading": "Cargando documento...",
     "download": "¡Descargar ahora!",
     "addChapter": "Agregar capítulo",
@@ -89,15 +99,24 @@
     "chapterTitleUpdated": "Título del capítulo actualizado",
     "chapterTitleNotUpdated": "Título del capítulo no actualizado",
     "chapterDescriptionUpdated": "Descripción del capítulo actualizada",
-    "chapterDescriptionNotUpdated": "Descripción del capítulo no actualizada"
+    "chapterDescriptionNotUpdated": "Descripción del capítulo no actualizada",
+    "words": "palabras",
+    "pages": "páginas"
   },
   "editor": {
     "editChapter": "Editar capítulo N°{number}: {title}",
     "startWriting": "Comienza a escribir...",
+    "placeholderEmpty": "Comienza a escribir, o presiona + en una línea vacía para encabezados, listas, imágenes...",
     "words": "{count} palabras",
+    "pages": "{count} páginas",
     "characters": "{count} caracteres",
     "saving": "Guardando...",
     "saved": "Guardado",
+    "savedLocally": "Guardado localmente",
+    "saveFailed": "Error al guardar",
+    "retry": "Reintentar",
+    "offline": "Sin conexión",
+    "aiGenerating": "IA escribiendo...",
     "toolbar": {
       "bold": "Negrita (Ctrl+B)",
       "italic": "Cursiva (Ctrl+I)",
@@ -128,7 +147,11 @@
       "imageUrl": "URL de imagen",
       "imageInsert": "Insertar",
       "colorReset": "Restablecer color",
-      "back": "Volver"
+      "back": "Volver",
+      "prevChapter": "Capítulo anterior",
+      "nextChapter": "Capítulo siguiente",
+      "aiContinue": "Continuar con IA",
+      "jumpToChapter": "Ir al capítulo"
     }
   },
   "theme": {
@@ -151,6 +174,15 @@
     "pdfExport": "Exportar PDF",
     "pdfExportContent": "Haz clic en 'Vista previa PDF' en la página de edición del libro para generar y descargar un PDF con todos tus capítulos y formato preservado.",
     "gotIt": "¡Entendido!"
+  },
+  "readability": {
+    "title": "Legibilidad",
+    "gradeLevel": "Nivel de grado",
+    "avgSentenceLength": "Long. media de oración",
+    "avgWordLength": "Long. media de palabra",
+    "complexWords": "Palabras complejas",
+    "sentences": "Oraciones",
+    "syllables": "Sílabas"
   },
   "locale": {
     "en": "EN",

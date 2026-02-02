@@ -4,6 +4,7 @@ import {
   createBook,
   deleteBook,
   deleteChapter,
+  getAllUserChapterTexts,
   getBookAndChapter,
   getBookAndChapters,
   getUserBooks,
@@ -12,6 +13,7 @@ import {
   updateChapterDescription,
   updateChapterField,
   updateChapterTitle,
+  type BookSortOption,
 } from "@/data-access/books";
 import type { booksZodType } from "@/types/types";
 
@@ -36,9 +38,17 @@ export async function deleteBookUseCase({
   return await deleteBook({ bookId, userId });
 }
 
-export async function getUserBooksUseCase({ userId }: { userId: number }) {
+export async function getUserBooksUseCase({
+  userId,
+  search,
+  sort,
+}: {
+  userId: number;
+  search?: string;
+  sort?: BookSortOption;
+}) {
   if (!userId) throw new Error("No userId attached");
-  return await getUserBooks({ userId });
+  return await getUserBooks({ userId, search, sort });
 }
 
 export async function getUserBookAndChaptersUseCase({
@@ -81,7 +91,8 @@ export async function updateChapterTextContentUseCase({
 }) {
   if (!bookId) throw new Error("No bookId attached");
   if (!chapterId) throw new Error("No chapterId attached");
-  if (!newTextContent) throw new Error("No newTextContent attached");
+  if (newTextContent === undefined || newTextContent === null)
+    throw new Error("No newTextContent attached");
   if (!userId) throw new Error("No userId attached");
   return await updateChapterField({
     bookId,
@@ -150,6 +161,15 @@ export async function swapChaptersUseCase({
   if (!idsOfNewOrder) throw new Error("No idsOfNewOrder attached");
   if (!userId) throw new Error("No userId attached");
   return await swapChapterNumber({ bookId, idsOfNewOrder, userId });
+}
+
+export async function getAllUserChapterTextsUseCase({
+  userId,
+}: {
+  userId: number;
+}) {
+  if (!userId) throw new Error("No userId attached");
+  return await getAllUserChapterTexts({ userId });
 }
 
 export async function addWritingSessionUseCase({

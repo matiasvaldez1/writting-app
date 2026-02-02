@@ -13,9 +13,15 @@ import type { AsyncReturnType } from "@/types/types";
 import { addChapterAction, deleteChapterAction } from "@/app/_actions/books";
 import type { getUserBookAndChapters } from "@/app/_actions/books";
 import { swapChaptersAction } from "@/app/_actions/chapters";
+import { estimatePageCount } from "@/lib/page-count";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import EditableChaptersFields from "./editable-chapter-fields";
+
+function countWords(html: string): number {
+  const text = html.replace(/<[^>]*>/g, "").trim();
+  return text ? text.split(/\s+/).length : 0;
+}
 
 export default function ChaptersList({
   bookAndChapters,
@@ -125,12 +131,17 @@ export default function ChaptersList({
                       <Link
                         href={`/dashboard/books/${bookId}/edit/${chapter.id}/editor`}
                       >
-                        <div className="flex justify-between border border-gray-100 p-5 rounded">
+                        <div className="flex justify-between border border-border bg-card rounded-lg p-5 hover:bg-accent/50 hover:border-primary/20 transition-all duration-150">
                           <EditableChaptersFields
                             bookId={bookId}
                             chapter={chapter}
                           />
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-3">
+                            <span className="text-xs text-muted-foreground whitespace-nowrap">
+                              {countWords(chapter.chapterText)} {t("words")} ·{" "}
+                              {estimatePageCount(chapter.chapterText)}{" "}
+                              {t("pages")}
+                            </span>
                             <button
                               onClick={(e) => {
                                 e.preventDefault();
@@ -143,7 +154,7 @@ export default function ChaptersList({
                               <TrashIcon className="h-5 w-5" />
                             </button>
                             <button {...provided.dragHandleProps}>
-                              <DragHandleDots1Icon className="h-8 w-8 cursor-grab" />
+                              <DragHandleDots1Icon className="h-6 w-6 cursor-grab text-muted-foreground" />
                             </button>
                           </div>
                         </div>

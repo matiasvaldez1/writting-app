@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Header from "@/app/_components/header";
 import Footer from "@/app/_components/footer";
 import { Toaster } from "@/components/ui/toaster";
+import LayoutShell from "@/components/layout-shell";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,9 +40,9 @@ export default async function RootLayout({
 
   return (
     <ClerkProvider>
-      <html lang={locale}>
+      <html lang={locale} suppressHydrationWarning>
         <head>
-          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <link rel="icon" href="/icon.ico" sizes="any" />
           <link rel="manifest" href="/manifest.json" />
           <meta name="theme-color" content="#000000" />
           <meta name="mobile-web-app-capable" content="yes" />
@@ -52,17 +53,17 @@ export default async function RootLayout({
           <meta name="apple-mobile-web-app-title" content="Writer App" />
           <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         </head>
-        <body className={inter.className}>
+        <body className={inter.className} suppressHydrationWarning>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider
               attribute="class"
-              defaultTheme="system"
+              defaultTheme="dark"
               enableSystem
               disableTransitionOnChange
             >
-              <Header />
-              <main className="min-h-[80svh]">{children}</main>
-              <Footer />
+              <LayoutShell header={<Header />} footer={<Footer />}>
+                {children}
+              </LayoutShell>
               <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>

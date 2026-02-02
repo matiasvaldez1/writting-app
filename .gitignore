@@ -45,3 +45,8 @@ next-env.d.ts
 public/sw.js
 public/workbox-*.js
 public/swe-worker-*.js
+
+# Playwright
+e2e/.auth/
+playwright-report/
+test-results/

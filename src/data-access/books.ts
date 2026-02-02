@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql, inArray, ilike, or, desc, asc } from "drizzle-orm";
 import { db } from "@/drizzle/db";
 import {
   AnalyticsTypeEnum,
@@ -7,6 +7,8 @@ import {
   UserAnalyticsTable,
 } from "@/drizzle/schema";
 import type { booksZodType } from "@/types/types";
+
+export type BookSortOption = "newest" | "oldest" | "name" | "chapters";
 
 export async function verifyBookOwnership({
   bookId,
@@ -29,31 +31,25 @@ export async function verifyBookOwnership({
 export async function createBook({ values }: { values: booksZodType }) {
   const { userId, bookDescription, bookName, amountOfChapters } = values;
 
-  const [bookAdded] = await db
-    .insert(BooksTable)
-    .values({
-      userId,
-      bookDescription,
-      bookName,
-      amountOfChapters,
-    })
-    .returning();
+  return await db.transaction(async (tx) => {
+    const [bookAdded] = await tx
+      .insert(BooksTable)
+      .values({ userId, bookDescription, bookName, amountOfChapters })
+      .returning();
 
-  const chapterCount = amountOfChapters || 1;
-  for (let i = 1; i <= chapterCount; i++) {
-    await db
-      .insert(ChaptersTable)
-      .values({
-        bookId: bookAdded.id,
-        chapterNumber: i,
-        chapterTitle: `Chapter ${i}`,
-        chapterText: "",
-        chapterDescription: `Chapter ${i} Description`,
-      })
-      .execute();
-  }
+    const chapterCount = amountOfChapters || 1;
+    const chapterValues = Array.from({ length: chapterCount }, (_, i) => ({
+      bookId: bookAdded.id,
+      chapterNumber: i + 1,
+      chapterTitle: `Chapter ${i + 1}`,
+      chapterText: "",
+      chapterDescription: `Chapter ${i + 1} Description`,
+    }));
 
-  return bookAdded;
+    await tx.insert(ChaptersTable).values(chapterValues);
+
+    return bookAdded;
+  });
 }
 
 export async function deleteBook({
@@ -73,12 +69,45 @@ export async function deleteBook({
   return bookDeleted;
 }
 
-export async function getUserBooks({ userId }: { userId: number }) {
+export async function getUserBooks({
+  userId,
+  search,
+  sort = "newest",
+}: {
+  userId: number;
+  search?: string;
+  sort?: BookSortOption;
+}) {
+  const conditions = [eq(BooksTable.userId, userId)];
+
+  if (search) {
+    conditions.push(
+      or(
+        ilike(BooksTable.bookName, `%${search}%`),
+        ilike(BooksTable.bookDescription, `%${search}%`)
+      )!
+    );
+  }
+
+  const orderByMap = {
+    newest: desc(BooksTable.createdAt),
+    oldest: asc(BooksTable.createdAt),
+    name: asc(BooksTable.bookName),
+    chapters: desc(BooksTable.amountOfChapters),
+  };
+
   const books = await db
-    .select()
+    .select({
+      id: BooksTable.id,
+      userId: BooksTable.userId,
+      bookName: BooksTable.bookName,
+      bookDescription: BooksTable.bookDescription,
+      amountOfChapters: BooksTable.amountOfChapters,
+      createdAt: BooksTable.createdAt,
+    })
     .from(BooksTable)
-    .where(eq(BooksTable.userId, userId))
-    .orderBy(BooksTable.createdAt);
+    .where(and(...conditions))
+    .orderBy(orderByMap[sort]);
 
   return books;
 }
@@ -93,12 +122,27 @@ export async function getBookAndChapters({
   await verifyBookOwnership({ bookId, userId });
 
   const [book] = await db
-    .select()
+    .select({
+      id: BooksTable.id,
+      userId: BooksTable.userId,
+      bookName: BooksTable.bookName,
+      bookDescription: BooksTable.bookDescription,
+      amountOfChapters: BooksTable.amountOfChapters,
+      createdAt: BooksTable.createdAt,
+    })
     .from(BooksTable)
     .where(eq(BooksTable.id, bookId));
 
   const chapters = await db
-    .select()
+    .select({
+      id: ChaptersTable.id,
+      bookId: ChaptersTable.bookId,
+      chapterNumber: ChaptersTable.chapterNumber,
+      chapterTitle: ChaptersTable.chapterTitle,
+      chapterDescription: ChaptersTable.chapterDescription,
+      chapterText: ChaptersTable.chapterText,
+      createdAt: ChaptersTable.createdAt,
+    })
     .from(ChaptersTable)
     .where(eq(ChaptersTable.bookId, bookId))
     .orderBy(ChaptersTable.chapterNumber);
@@ -135,7 +179,25 @@ export async function getBookAndChapter({
       and(eq(ChaptersTable.id, chapterId), eq(ChaptersTable.bookId, bookId))
     );
 
-  return { ...book, chapter };
+  const allChapters = await db
+    .select({
+      id: ChaptersTable.id,
+      chapterNumber: ChaptersTable.chapterNumber,
+      chapterTitle: ChaptersTable.chapterTitle,
+    })
+    .from(ChaptersTable)
+    .where(eq(ChaptersTable.bookId, bookId))
+    .orderBy(ChaptersTable.chapterNumber);
+
+  const currentIndex = allChapters.findIndex((c) => c.id === chapterId);
+  const prevChapterId =
+    currentIndex > 0 ? allChapters[currentIndex - 1].id : null;
+  const nextChapterId =
+    currentIndex < allChapters.length - 1
+      ? allChapters[currentIndex + 1].id
+      : null;
+
+  return { ...book, chapter, prevChapterId, nextChapterId, allChapters };
 }
 
 export async function updateChapterField({
@@ -221,16 +283,21 @@ export async function swapChapterNumber({
 }) {
   await verifyBookOwnership({ bookId, userId });
 
-  for (let i = 0; i < idsOfNewOrder.length; i++) {
-    const chapterId = idsOfNewOrder[i];
-    await db
-      .update(ChaptersTable)
-      .set({ chapterNumber: i + 1 })
-      .where(
-        and(eq(ChaptersTable.bookId, bookId), eq(ChaptersTable.id, chapterId))
+  if (idsOfNewOrder.length === 0) return true;
+
+  const cases = idsOfNewOrder
+    .map((id, i) => sql`WHEN ${ChaptersTable.id} = ${id} THEN ${i + 1}`)
+    .reduce((acc, c) => sql`${acc} ${c}`);
+
+  await db
+    .update(ChaptersTable)
+    .set({ chapterNumber: sql`(CASE ${cases} END)::integer` })
+    .where(
+      and(
+        eq(ChaptersTable.bookId, bookId),
+        inArray(ChaptersTable.id, idsOfNewOrder)
       )
-      .execute();
-  }
+    );
 
   return true;
 }
@@ -297,17 +364,25 @@ export async function deleteChapter({
   }
 
   const remaining = await db
-    .select()
+    .select({ id: ChaptersTable.id })
     .from(ChaptersTable)
     .where(eq(ChaptersTable.bookId, bookId))
     .orderBy(ChaptersTable.chapterNumber);
 
-  for (let i = 0; i < remaining.length; i++) {
+  if (remaining.length > 0) {
+    const cases = remaining
+      .map((ch, i) => sql`WHEN ${ChaptersTable.id} = ${ch.id} THEN ${i + 1}`)
+      .reduce((acc, c) => sql`${acc} ${c}`);
+
     await db
       .update(ChaptersTable)
-      .set({ chapterNumber: i + 1 })
-      .where(eq(ChaptersTable.id, remaining[i].id))
-      .execute();
+      .set({ chapterNumber: sql`(CASE ${cases} END)::integer` })
+      .where(
+        inArray(
+          ChaptersTable.id,
+          remaining.map((ch) => ch.id)
+        )
+      );
   }
 
   await db
@@ -363,9 +438,25 @@ export async function addWritingSession({
   return newRecord;
 }
 
+export async function getAllUserChapterTexts({ userId }: { userId: number }) {
+  const rows = await db
+    .select({ chapterText: ChaptersTable.chapterText })
+    .from(ChaptersTable)
+    .innerJoin(BooksTable, eq(ChaptersTable.bookId, BooksTable.id))
+    .where(eq(BooksTable.userId, userId));
+
+  return rows.map((r) => r.chapterText);
+}
+
 export async function getUserAnalytics({ userId }: { userId: number }) {
   const analytics = await db
-    .select()
+    .select({
+      id: UserAnalyticsTable.id,
+      userId: UserAnalyticsTable.userId,
+      type: UserAnalyticsTable.type,
+      value: UserAnalyticsTable.value,
+      createdAt: UserAnalyticsTable.createdAt,
+    })
     .from(UserAnalyticsTable)
     .where(eq(UserAnalyticsTable.userId, userId));
 
