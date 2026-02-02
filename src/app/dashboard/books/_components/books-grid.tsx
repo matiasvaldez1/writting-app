@@ -94,7 +94,7 @@ export default function BooksGrid({ books }: { books: Book[] }) {
                 <BookOptionsDropdown bookId={book.id} />
               </div>
               <Link href={`/dashboard/books/${book.id}/edit`}>
-                <div className="cursor-pointer rounded-lg overflow-hidden bg-muted">
+                <div className="flex justify-center cursor-pointer rounded-lg overflow-hidden bg-muted">
                   <BookImageByTheme />
                 </div>
               </Link>
