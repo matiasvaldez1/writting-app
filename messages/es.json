@@ -250,6 +250,14 @@
     "filterByTags": "Filtrar por etiquetas",
     "updated": "Etiquetas actualizadas"
   },
+  "validation": {
+    "bookNameMin": "El nombre debe tener al menos 3 caracteres",
+    "bookNameMax": "El nombre es demasiado largo",
+    "bookDescriptionMin": "La descripción debe tener al menos 10 caracteres",
+    "bookDescriptionMax": "La descripción es demasiado larga",
+    "chaptersMin": "Debe tener al menos 1 documento",
+    "chaptersMax": "Demasiados documentos"
+  },
   "feedback": {
     "button": "Feedback",
     "tooltip": "Enviar feedback"

@@ -89,7 +89,7 @@ export default function TagPicker({
             <PlusIcon className="h-3.5 w-3.5" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-64 p-3" align="start">
+        <PopoverContent className="w-80 p-3" align="start">
           <p className="text-sm font-medium mb-2">{t("create")}</p>
           <Input
             placeholder={t("name")}

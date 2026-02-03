@@ -42,7 +42,7 @@ export default function BookStatusTags({
   const [selectedTagIds, setSelectedTagIds] =
     useState<number[]>(initialBookTagIds);
   const [userTags, setUserTags] = useState<Tag[]>(initialUserTags);
-  const [editingTag, setEditingTag] = useState<Tag | null>(null);
+  const [editingTagId, setEditingTagId] = useState<number | null>(null);
   const [editName, setEditName] = useState("");
   const [editColor, setEditColor] = useState("");
 
@@ -62,17 +62,17 @@ export default function BookStatusTags({
   };
 
   const handleEditTag = async () => {
-    if (!editingTag || !editName.trim()) return;
+    if (!editingTagId || !editName.trim()) return;
     const result = await updateTagAction({
-      tagId: editingTag.id,
+      tagId: editingTagId,
       name: editName.trim(),
       color: editColor,
     });
     if (result.status === "success" && result.tag) {
       setUserTags((prev) =>
-        prev.map((t) => (t.id === editingTag.id ? result.tag! : t))
+        prev.map((t) => (t.id === editingTagId ? result.tag! : t))
       );
-      setEditingTag(null);
+      setEditingTagId(null);
     }
   };
 
@@ -101,14 +101,14 @@ export default function BookStatusTags({
             {userTags.map((tag) => (
               <Popover
                 key={tag.id}
-                open={editingTag?.id === tag.id}
+                open={editingTagId === tag.id}
                 onOpenChange={(open) => {
                   if (open) {
-                    setEditingTag(tag);
+                    setEditingTagId(tag.id);
                     setEditName(tag.name);
                     setEditColor(tag.color);
                   } else {
-                    setEditingTag(null);
+                    setEditingTagId(null);
                   }
                 }}
               >
@@ -125,7 +125,7 @@ export default function BookStatusTags({
                     {tag.name}
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className="w-64 p-3" align="start">
+                <PopoverContent className="w-80 p-3" align="start">
                   <p className="text-sm font-medium mb-2">{tTags("edit")}</p>
                   <Input
                     value={editName}

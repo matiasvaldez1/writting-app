@@ -250,6 +250,14 @@
     "filterByTags": "Filter by tags",
     "updated": "Tags updated"
   },
+  "validation": {
+    "bookNameMin": "Project name must be at least 3 characters",
+    "bookNameMax": "Project name is too long",
+    "bookDescriptionMin": "Description must be at least 10 characters",
+    "bookDescriptionMax": "Description is too long",
+    "chaptersMin": "Must have at least 1 document",
+    "chaptersMax": "Too many documents"
+  },
   "feedback": {
     "button": "Feedback",
     "tooltip": "Send feedback"

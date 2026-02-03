@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import z from "zod";
+import { getTranslations } from "next-intl/server";
 import { getUserAnalytics } from "@/data-access/books";
 import { booksZodSchema } from "@/types/zodSchemas";
 import { templates } from "@/lib/templates";
@@ -39,12 +40,44 @@ const createBookActionSchema = booksZodSchema
   })
   .omit({ userId: true });
 
-export async function createBookAction(param: unknown, formData: FormData) {
+type CreateBookState = {
+  status: string;
+  bookName?: string[];
+  bookDescription?: string[];
+  amountOfChapters?: string[];
+};
+
+export async function createBookAction(
+  _param: CreateBookState,
+  formData: FormData
+): Promise<CreateBookState> {
   const result = createBookActionSchema.safeParse(
     Object.fromEntries(formData.entries())
   );
   if (!result.success) {
-    return { ...result.error.formErrors.fieldErrors, status: "error" };
+    const t = await getTranslations("validation");
+    const fieldErrors = result.error.formErrors.fieldErrors;
+    const translated: Record<string, string[]> = {};
+    const errorMap: Record<string, Record<string, string>> = {
+      bookName: { too_small: t("bookNameMin"), too_big: t("bookNameMax") },
+      bookDescription: {
+        too_small: t("bookDescriptionMin"),
+        too_big: t("bookDescriptionMax"),
+      },
+      amountOfChapters: {
+        too_small: t("chaptersMin"),
+        too_big: t("chaptersMax"),
+      },
+    };
+    for (const [field, errors] of Object.entries(fieldErrors)) {
+      const issuesForField = result.error.issues.filter(
+        (i) => i.path[0] === field
+      );
+      translated[field] = issuesForField.map(
+        (issue) => errorMap[field]?.[issue.code] ?? (errors?.[0] || "")
+      );
+    }
+    return { ...translated, status: "error" };
   }
 
   const user = await getUserByClerkIdUseCase();
