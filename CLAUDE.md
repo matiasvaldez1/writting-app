@@ -29,8 +29,8 @@ Server Actions (src/app/_actions/)
       → Drizzle ORM (src/drizzle/)
 ```
 
-- **Auth**: Clerk (`clerkMiddleware` in `src/middleware.ts`). Clerk webhook at `/api/webhooks` syncs users to PostgreSQL.
-- **Database**: PostgreSQL via Vercel Postgres + Drizzle ORM. Schema in `src/drizzle/schema.ts`. Tables: `users`, `books`, `chapters`, `user_analytics`. All foreign keys have `ON DELETE CASCADE` and indexes.
+- **Auth**: Clerk (`clerkMiddleware` in `src/middleware.ts`). Clerk webhook at `/api/webhooks` syncs users to PostgreSQL. `getUserByClerkIdUseCase` auto-creates the user record from Clerk data as a fallback if the webhook hasn't fired.
+- **Database**: PostgreSQL via Vercel Postgres + Drizzle ORM. Schema in `src/drizzle/schema.ts`. Tables: `users`, `books`, `chapters`, `user_analytics`, `tags`, `book_tags`. Enums: `analytics_type`, `book_status`. All foreign keys have `ON DELETE CASCADE` and indexes. Books have a `status` field (draft/in_progress/completed/archived). Tags are user-scoped with a color; books link to tags via `book_tags` junction table.
 - **Ownership checks**: Every server action verifies the authenticated user owns the book/chapter being accessed via `verifyBookOwnership()` in data-access layer.
 - **Editor**: Tiptap rich text editor with extensions (StarterKit, Color, TextStyle, Typography, Underline, CharacterCount, Placeholder, Link, Image, TextAlign). Medium-like UX with `BubbleMenu` (inline formatting on text selection), `FloatingMenu` (block insertion on empty lines), and a slim `EditorTopBar` (undo/redo, save status, word count, fullscreen, help). 2-second debounce auto-save. Writing session duration tracked via `useWritingSession` hook and stored in `user_analytics`.
 - **UI**: shadcn/ui (new-york style) + Tailwind CSS. Dark/light mode via `next-themes`. Shared UI components in `src/components/ui/`.
@@ -39,14 +39,15 @@ Server Actions (src/app/_actions/)
 - **i18n**: `next-intl` without URL routing. Locale determined by cookie → Accept-Language → default `"en"`. Config at `src/i18n/request.ts`, message files at `messages/{en,es}.json`. Locale toggle in header sets cookie and refreshes.
 - **Drag-and-drop**: `@hello-pangea/dnd` for chapter reordering with `useOptimistic` for instant UI feedback.
 - **Environment validation**: `src/lib/env.ts` validates required env vars at startup via Zod.
+- **Feedback**: Canny widget via `NEXT_PUBLIC_CANNY_BOARD_TOKEN`. Button in sidebar footer + mobile nav. Loads SDK on mount, identifies user via Clerk.
 
 ## Route Structure
 
 ```
 /                                          → Landing page
 /dashboard                                 → Analytics dashboard
-/dashboard/books                           → Book list with search/filter/sort
-/dashboard/books/[id]/edit                 → Chapter management + PDF export + book metadata editing
+/dashboard/books                           → Book list with search/filter/sort/status filter + tag display
+/dashboard/books/[id]/edit                 → Chapter management + PDF export + book metadata + status/tags editing
 /dashboard/books/[id]/edit/[chapter_id]/editor → Tiptap rich text editor
 ```
 
@@ -67,4 +68,5 @@ See `.env.example` for all required variables:
 
 - `POSTGRES_URL` — Vercel Postgres connection string
 - `WEBHOOK_SECRET` — Clerk webhook verification secret
+- `NEXT_PUBLIC_CANNY_BOARD_TOKEN` — Canny feedback widget board token (optional)
 - Clerk keys (publishable + secret) as configured by Clerk SDK
