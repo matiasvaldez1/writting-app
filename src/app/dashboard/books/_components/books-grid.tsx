@@ -12,15 +12,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { BookStatus } from "@/types/zodSchemas";
 import BookImageByTheme from "./book-image-by-theme";
 import BookOptionsDropdown from "./book-options-dropdown";
+import { StatusBadge, StatusFilter } from "./status-select";
+
+type Tag = { id: number; name: string; color: string };
 
 type Book = {
   id: number;
   bookName: string;
   bookDescription: string;
   amountOfChapters: number | null;
+  status: BookStatus;
   createdAt: Date;
+  tags?: Tag[];
 };
 
 export default function BooksGrid({ books }: { books: Book[] }) {
@@ -32,11 +38,12 @@ export default function BooksGrid({ books }: { books: Book[] }) {
 
   const search = searchParams.get("q") ?? "";
   const sort = searchParams.get("sort") ?? "newest";
+  const statusFilter = searchParams.get("status") ?? "all";
 
   const updateParams = useCallback(
     (key: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
-      if (value) {
+      if (value && value !== "all") {
         params.set(key, value);
       } else {
         params.delete(key);
@@ -77,6 +84,10 @@ export default function BooksGrid({ books }: { books: Book[] }) {
             <SelectItem value="chapters">{t("mostChapters")}</SelectItem>
           </SelectContent>
         </Select>
+        <StatusFilter
+          value={statusFilter}
+          onValueChange={(v) => updateParams("status", v)}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
@@ -93,6 +104,7 @@ export default function BooksGrid({ books }: { books: Book[] }) {
                 </h2>
                 <BookOptionsDropdown bookId={book.id} />
               </div>
+              <StatusBadge status={book.status} />
               <Link href={`/dashboard/books/${book.id}/edit`}>
                 <div className="flex justify-center cursor-pointer rounded-lg overflow-hidden bg-muted">
                   <BookImageByTheme />
@@ -101,6 +113,19 @@ export default function BooksGrid({ books }: { books: Book[] }) {
               <p className="text-muted-foreground line-clamp-4">
                 {book.bookDescription}
               </p>
+              {book.tags && book.tags.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {book.tags.map((tag) => (
+                    <span
+                      key={tag.id}
+                      className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium text-white"
+                      style={{ backgroundColor: tag.color }}
+                    >
+                      {tag.name}
+                    </span>
+                  ))}
+                </div>
+              )}
               {Boolean(book.amountOfChapters) && (
                 <p className="font-medium text-muted-foreground">
                   {t("chapters", { count: book.amountOfChapters ?? 0 })}

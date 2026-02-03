@@ -227,6 +227,33 @@
     "by": "by",
     "backToHome": "Back to home"
   },
+  "status": {
+    "label": "Status",
+    "draft": "Draft",
+    "in_progress": "In progress",
+    "completed": "Completed",
+    "archived": "Archived",
+    "all": "All statuses",
+    "updated": "Status updated"
+  },
+  "tags": {
+    "label": "Tags",
+    "add": "Add tag",
+    "create": "Create tag",
+    "edit": "Edit tag",
+    "delete": "Delete tag",
+    "name": "Tag name",
+    "color": "Color",
+    "noTags": "No tags yet",
+    "save": "Save",
+    "cancel": "Cancel",
+    "filterByTags": "Filter by tags",
+    "updated": "Tags updated"
+  },
+  "feedback": {
+    "button": "Feedback",
+    "tooltip": "Send feedback"
+  },
   "error": {
     "somethingWentWrong": "Something went wrong!",
     "tryAgain": "Try again"

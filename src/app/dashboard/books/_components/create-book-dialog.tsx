@@ -18,6 +18,9 @@ import { createBookAction } from "@/app/_actions/books";
 import { useToast } from "@/components/ui/use-toast";
 import { templates } from "@/lib/templates";
 import { cn } from "@/lib/utils";
+import type { BookStatus } from "@/types/zodSchemas";
+import StatusSelect from "./status-select";
+import TagPicker, { type Tag } from "./tag-picker";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -30,15 +33,24 @@ function SubmitButton() {
   );
 }
 
-export default function CreateBookDialog() {
+export default function CreateBookDialog({ userTags }: { userTags: Tag[] }) {
   const t = useTranslations("createBook");
+  const tStatus = useTranslations("status");
+  const tTags = useTranslations("tags");
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [amountOfChaptersIsKnown, setAmountOfChaptersIsKnown] = useState(false);
+  const [bookStatus, setBookStatus] = useState<BookStatus>("draft");
+  const [tags, setTags] = useState<Tag[]>(userTags);
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([]);
   const [state, action] = useFormState(createBookAction, {
     status: "",
   });
+
+  useEffect(() => {
+    setTags(userTags);
+  }, [userTags]);
 
   useEffect(() => {
     if (state.status === "success") {
@@ -47,16 +59,26 @@ export default function CreateBookDialog() {
       });
       setOpen(false);
       setSelectedTemplate(null);
+      setBookStatus("draft");
+      setSelectedTagIds([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status]);
+
+  const handleToggleTag = (tagId: number) => {
+    setSelectedTagIds((prev) =>
+      prev.includes(tagId)
+        ? prev.filter((id) => id !== tagId)
+        : [...prev, tagId]
+    );
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger onClick={() => setOpen((prev) => !prev)} asChild>
         <Button variant="outline">{t("trigger")}</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="my-5">{t("title")}</DialogTitle>
           <div className="mb-4">
@@ -109,6 +131,25 @@ export default function CreateBookDialog() {
             {state?.bookDescription && (
               <span className="text-destructive">{state.bookDescription}</span>
             )}
+            <div className="space-y-2">
+              <Label className="text-base">{tStatus("label")}</Label>
+              <StatusSelect value={bookStatus} onValueChange={setBookStatus} />
+              <input type="hidden" name="status" value={bookStatus} />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-base">{tTags("label")}</Label>
+              <TagPicker
+                tags={tags}
+                selectedTagIds={selectedTagIds}
+                onToggle={handleToggleTag}
+                onTagCreated={(tag) => setTags((prev) => [...prev, tag])}
+              />
+              <input
+                type="hidden"
+                name="tagIds"
+                value={JSON.stringify(selectedTagIds)}
+              />
+            </div>
             {!selectedTemplate && (
               <>
                 <div className="flex items-center gap-3">

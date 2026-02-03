@@ -16,6 +16,13 @@ export const AnalyticsTypeEnum = pgEnum("analytics_type", [
   "wordCount",
 ]);
 
+export const BookStatusEnum = pgEnum("book_status", [
+  "draft",
+  "in_progress",
+  "completed",
+  "archived",
+]);
+
 export const UsersTable = pgTable(
   "users",
   {
@@ -44,6 +51,7 @@ export const BooksTable = pgTable(
     bookName: text("bookName").notNull(),
     bookDescription: text("bookDescription").notNull(),
     amountOfChapters: integer("amountOfChapters"),
+    status: BookStatusEnum("status").default("draft").notNull(),
     isPublic: boolean("isPublic").default(false).notNull(),
     publicSlug: text("publicSlug").unique(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
@@ -89,6 +97,51 @@ export const UserAnalyticsTable = pgTable(
   (analytics) => {
     return {
       userIdIdx: index("analytics_userId_idx").on(analytics.userId),
+    };
+  }
+);
+
+export const TagsTable = pgTable(
+  "tags",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("userId")
+      .notNull()
+      .references(() => UsersTable.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    color: text("color").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (tags) => {
+    return {
+      userIdIdx: index("tags_userId_idx").on(tags.userId),
+      uniqueUserTag: uniqueIndex("tags_userId_name_idx").on(
+        tags.userId,
+        tags.name
+      ),
+    };
+  }
+);
+
+export const BookTagsTable = pgTable(
+  "book_tags",
+  {
+    id: serial("id").primaryKey(),
+    bookId: integer("bookId")
+      .notNull()
+      .references(() => BooksTable.id, { onDelete: "cascade" }),
+    tagId: integer("tagId")
+      .notNull()
+      .references(() => TagsTable.id, { onDelete: "cascade" }),
+  },
+  (bookTags) => {
+    return {
+      bookIdIdx: index("bookTags_bookId_idx").on(bookTags.bookId),
+      tagIdIdx: index("bookTags_tagId_idx").on(bookTags.tagId),
+      uniqueBookTag: uniqueIndex("bookTags_bookId_tagId_idx").on(
+        bookTags.bookId,
+        bookTags.tagId
+      ),
     };
   }
 );

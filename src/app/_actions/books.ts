@@ -5,6 +5,8 @@ import z from "zod";
 import { getUserAnalytics } from "@/data-access/books";
 import { booksZodSchema } from "@/types/zodSchemas";
 import { templates } from "@/lib/templates";
+import { bookStatusSchema } from "@/types/zodSchemas";
+import type { BookStatus } from "@/types/zodSchemas";
 import {
   addChapterUseCase,
   addWritingSessionUseCase,
@@ -13,12 +15,15 @@ import {
   deleteChapterUseCase,
   getAllUserChapterTextsUseCase,
   getDailyWordGoalUseCase,
+  getBookTagsUseCase,
   getUserBookAndChapterUseCase,
   getUserBookAndChaptersUseCase,
   getUserBooksUseCase,
   recordWordCountUseCase,
+  setBookTagsUseCase,
   toggleBookPublicUseCase,
   updateBookMetadataUseCase,
+  updateBookStatusUseCase,
   updateChapterDescriptionUseCase,
   updateChapterTextContentUseCase,
   updateChapterTitleUseCase,
@@ -27,7 +32,11 @@ import {
 import { getUserByClerkIdUseCase } from "@/use-cases/user";
 
 const createBookActionSchema = booksZodSchema
-  .extend({ amountOfChapters: z.string().nullish() })
+  .extend({
+    amountOfChapters: z.string().nullish(),
+    status: bookStatusSchema.optional(),
+    tagIds: z.string().optional(),
+  })
   .omit({ userId: true });
 
 export async function createBookAction(param: unknown, formData: FormData) {
@@ -45,7 +54,7 @@ export async function createBookAction(param: unknown, formData: FormData) {
     ? templates.find((t) => t.id === templateId)
     : null;
 
-  await createBookUseCase({
+  const book = await createBookUseCase({
     values: {
       ...data,
       userId: user.id,
@@ -55,6 +64,26 @@ export async function createBookAction(param: unknown, formData: FormData) {
     },
     initialDocuments: template?.documents,
   });
+
+  if (data.status && data.status !== "draft") {
+    await updateBookStatusUseCase({
+      bookId: book.id,
+      userId: user.id,
+      status: data.status,
+    });
+  }
+
+  if (data.tagIds) {
+    try {
+      const tagIds = JSON.parse(data.tagIds) as number[];
+      if (tagIds.length > 0) {
+        await setBookTagsUseCase({ bookId: book.id, userId: user.id, tagIds });
+      }
+    } catch {
+      // ignore invalid tagIds
+    }
+  }
+
   revalidatePath("/dashboard/books");
   return { status: "success" };
 }
@@ -70,6 +99,7 @@ export async function deleteBookAction(bookId: number) {
 export async function getUserBooks(params?: {
   search?: string;
   sort?: string;
+  status?: string;
 }) {
   const user = await getUserByClerkIdUseCase();
   const sort = (params?.sort || "newest") as
@@ -77,10 +107,12 @@ export async function getUserBooks(params?: {
     | "oldest"
     | "name"
     | "chapters";
+  const statusParsed = bookStatusSchema.safeParse(params?.status);
   const books = await getUserBooksUseCase({
     userId: user.id,
     search: params?.search,
     sort,
+    status: statusParsed.success ? statusParsed.data : undefined,
   });
   return { status: "success", books };
 }
@@ -242,4 +274,29 @@ export async function toggleBookPublicAction(bookId: number) {
     isPublic: updated.isPublic,
     publicSlug: updated.publicSlug,
   };
+}
+
+export async function updateBookStatusAction(
+  bookId: number,
+  status: BookStatus
+) {
+  const user = await getUserByClerkIdUseCase();
+  await updateBookStatusUseCase({ bookId, userId: user.id, status });
+  revalidatePath(`/dashboard/books/${bookId}/edit`);
+  revalidatePath("/dashboard/books");
+  return { status: "success" };
+}
+
+export async function setBookTagsAction(bookId: number, tagIds: number[]) {
+  const user = await getUserByClerkIdUseCase();
+  await setBookTagsUseCase({ bookId, userId: user.id, tagIds });
+  revalidatePath(`/dashboard/books/${bookId}/edit`);
+  revalidatePath("/dashboard/books");
+  return { status: "success" };
+}
+
+export async function getBookTagsAction(bookId: number) {
+  const user = await getUserByClerkIdUseCase();
+  const tags = await getBookTagsUseCase({ bookId, userId: user.id });
+  return { status: "success", tags };
 }

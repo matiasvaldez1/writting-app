@@ -227,6 +227,33 @@
     "by": "por",
     "backToHome": "Volver al inicio"
   },
+  "status": {
+    "label": "Estado",
+    "draft": "Borrador",
+    "in_progress": "En progreso",
+    "completed": "Completado",
+    "archived": "Archivado",
+    "all": "Todos los estados",
+    "updated": "Estado actualizado"
+  },
+  "tags": {
+    "label": "Etiquetas",
+    "add": "Agregar etiqueta",
+    "create": "Crear etiqueta",
+    "edit": "Editar etiqueta",
+    "delete": "Eliminar etiqueta",
+    "name": "Nombre de etiqueta",
+    "color": "Color",
+    "noTags": "Sin etiquetas",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "filterByTags": "Filtrar por etiquetas",
+    "updated": "Etiquetas actualizadas"
+  },
+  "feedback": {
+    "button": "Feedback",
+    "tooltip": "Enviar feedback"
+  },
   "error": {
     "somethingWentWrong": "¡Algo salió mal!",
     "tryAgain": "Reintentar"

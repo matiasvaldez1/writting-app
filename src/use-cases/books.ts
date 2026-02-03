@@ -14,13 +14,17 @@ import {
   swapChapterNumber,
   toggleBookPublic,
   updateBookMetadata,
+  updateBookStatus,
   updateChapterDescription,
   updateChapterField,
   updateChapterTitle,
   updateDailyWordGoal,
   type BookSortOption,
 } from "@/data-access/books";
+import { setBookTags, getBookTags } from "@/data-access/tags";
+import { verifyBookOwnership } from "@/data-access/books";
 import type { booksZodType } from "@/types/types";
+import type { BookStatus } from "@/types/zodSchemas";
 
 export async function createBookUseCase({
   values,
@@ -53,13 +57,15 @@ export async function getUserBooksUseCase({
   userId,
   search,
   sort,
+  status,
 }: {
   userId: number;
   search?: string;
   sort?: BookSortOption;
+  status?: BookStatus;
 }) {
   if (!userId) throw new Error("No userId attached");
-  return await getUserBooks({ userId, search, sort });
+  return await getUserBooks({ userId, search, sort, status });
 }
 
 export async function getUserBookAndChaptersUseCase({
@@ -286,4 +292,46 @@ export async function updateBookMetadataUseCase({
     bookName,
     bookDescription,
   });
+}
+
+export async function updateBookStatusUseCase({
+  bookId,
+  userId,
+  status,
+}: {
+  bookId: number;
+  userId: number;
+  status: BookStatus;
+}) {
+  if (!bookId) throw new Error("No bookId attached");
+  if (!userId) throw new Error("No userId attached");
+  return await updateBookStatus({ bookId, userId, status });
+}
+
+export async function setBookTagsUseCase({
+  bookId,
+  userId,
+  tagIds,
+}: {
+  bookId: number;
+  userId: number;
+  tagIds: number[];
+}) {
+  if (!bookId) throw new Error("No bookId attached");
+  if (!userId) throw new Error("No userId attached");
+  await verifyBookOwnership({ bookId, userId });
+  await setBookTags({ bookId, tagIds });
+}
+
+export async function getBookTagsUseCase({
+  bookId,
+  userId,
+}: {
+  bookId: number;
+  userId: number;
+}) {
+  if (!bookId) throw new Error("No bookId attached");
+  if (!userId) throw new Error("No userId attached");
+  await verifyBookOwnership({ bookId, userId });
+  return getBookTags({ bookId });
 }

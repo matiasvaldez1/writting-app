@@ -13,6 +13,7 @@ import { usePathname } from "next/navigation";
 import { LoadingSpinner } from "@/components/ui/loading";
 import { Button } from "@/components/ui/button";
 import OfflineBanner from "@/components/offline-banner";
+import CannyFeedbackButton from "@/components/canny-feedback-button";
 
 const navItems = [
   { href: "/dashboard", icon: HomeIcon, labelKey: "dashboard" as const },
@@ -93,7 +94,8 @@ export default function DashboardLayout({
               </Link>
             ))}
           </nav>
-          <div className="p-2 border-t border-border">
+          <div className="p-2 border-t border-border space-y-1">
+            <CannyFeedbackButton collapsed={!isSidebarOpen} />
             <Button
               onClick={toggleSidebar}
               variant="ghost"
@@ -124,6 +126,9 @@ export default function DashboardLayout({
               <span>{t(item.labelKey)}</span>
             </Link>
           ))}
+          <div className="flex-1 flex flex-col items-center gap-1 py-3">
+            <CannyFeedbackButton collapsed />
+          </div>
         </nav>
       </div>
     </>

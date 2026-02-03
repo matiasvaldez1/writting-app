@@ -8,6 +8,7 @@ import {
   UsersTable,
 } from "@/drizzle/schema";
 import type { booksZodType } from "@/types/types";
+import type { BookStatus } from "@/types/zodSchemas";
 
 export type BookSortOption = "newest" | "oldest" | "name" | "chapters";
 
@@ -91,10 +92,12 @@ export async function getUserBooks({
   userId,
   search,
   sort = "newest",
+  status,
 }: {
   userId: number;
   search?: string;
   sort?: BookSortOption;
+  status?: BookStatus;
 }) {
   const conditions = [eq(BooksTable.userId, userId)];
 
@@ -105,6 +108,10 @@ export async function getUserBooks({
         ilike(BooksTable.bookDescription, `%${search}%`)
       )!
     );
+  }
+
+  if (status) {
+    conditions.push(eq(BooksTable.status, status));
   }
 
   const orderByMap = {
@@ -121,6 +128,7 @@ export async function getUserBooks({
       bookName: BooksTable.bookName,
       bookDescription: BooksTable.bookDescription,
       amountOfChapters: BooksTable.amountOfChapters,
+      status: BooksTable.status,
       createdAt: BooksTable.createdAt,
     })
     .from(BooksTable)
@@ -146,6 +154,7 @@ export async function getBookAndChapters({
       bookName: BooksTable.bookName,
       bookDescription: BooksTable.bookDescription,
       amountOfChapters: BooksTable.amountOfChapters,
+      status: BooksTable.status,
       isPublic: BooksTable.isPublic,
       publicSlug: BooksTable.publicSlug,
       createdAt: BooksTable.createdAt,
@@ -411,6 +420,26 @@ export async function deleteChapter({
     .where(eq(BooksTable.id, bookId));
 
   return deleted;
+}
+
+export async function updateBookStatus({
+  bookId,
+  userId,
+  status,
+}: {
+  bookId: number;
+  userId: number;
+  status: BookStatus;
+}) {
+  await verifyBookOwnership({ bookId, userId });
+
+  const [updated] = await db
+    .update(BooksTable)
+    .set({ status })
+    .where(and(eq(BooksTable.id, bookId), eq(BooksTable.userId, userId)))
+    .returning();
+
+  return updated;
 }
 
 export async function updateBookMetadata({
