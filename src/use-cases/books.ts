@@ -7,23 +7,34 @@ import {
   getAllUserChapterTexts,
   getBookAndChapter,
   getBookAndChapters,
+  getBookBySlug,
+  getDailyWordGoal,
   getUserBooks,
+  recordWordCount,
   swapChapterNumber,
+  toggleBookPublic,
   updateBookMetadata,
   updateChapterDescription,
   updateChapterField,
   updateChapterTitle,
+  updateDailyWordGoal,
   type BookSortOption,
 } from "@/data-access/books";
 import type { booksZodType } from "@/types/types";
 
-export async function createBookUseCase({ values }: { values: booksZodType }) {
+export async function createBookUseCase({
+  values,
+  initialDocuments,
+}: {
+  values: booksZodType;
+  initialDocuments?: { title: string; description: string; content: string }[];
+}) {
   const { bookDescription, bookName, userId } = values;
   if (!bookDescription)
     throw new Error("The book must have a book description");
   if (!bookName) throw new Error("The book must have a book name");
   if (!userId) throw new Error("The book must be linked to a userId");
-  return await createBook({ values });
+  return await createBook({ values, initialDocuments });
 }
 
 export async function deleteBookUseCase({
@@ -197,6 +208,33 @@ export async function addChapterUseCase({
   return await addChapter({ bookId, userId });
 }
 
+export async function recordWordCountUseCase({
+  userId,
+  wordsDelta,
+}: {
+  userId: number;
+  wordsDelta: number;
+}) {
+  if (!userId) throw new Error("No userId attached");
+  return await recordWordCount({ userId, wordsDelta });
+}
+
+export async function updateDailyWordGoalUseCase({
+  userId,
+  goal,
+}: {
+  userId: number;
+  goal: number;
+}) {
+  if (!userId) throw new Error("No userId attached");
+  return await updateDailyWordGoal({ userId, goal });
+}
+
+export async function getDailyWordGoalUseCase({ userId }: { userId: number }) {
+  if (!userId) throw new Error("No userId attached");
+  return await getDailyWordGoal({ userId });
+}
+
 export async function deleteChapterUseCase({
   bookId,
   chapterId,
@@ -210,6 +248,23 @@ export async function deleteChapterUseCase({
   if (!chapterId) throw new Error("No chapterId attached");
   if (!userId) throw new Error("No userId attached");
   return await deleteChapter({ bookId, chapterId, userId });
+}
+
+export async function toggleBookPublicUseCase({
+  bookId,
+  userId,
+}: {
+  bookId: number;
+  userId: number;
+}) {
+  if (!bookId) throw new Error("No bookId attached");
+  if (!userId) throw new Error("No userId attached");
+  return await toggleBookPublic({ bookId, userId });
+}
+
+export async function getBookBySlugUseCase({ slug }: { slug: string }) {
+  if (!slug) throw new Error("No slug attached");
+  return await getBookBySlug({ slug });
 }
 
 export async function updateBookMetadataUseCase({

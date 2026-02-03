@@ -12,6 +12,8 @@ import {
   CheckIcon,
   SunIcon,
   MoonIcon,
+  EyeNoneIcon,
+  Cross2Icon,
 } from "@radix-ui/react-icons";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -46,6 +48,8 @@ interface EditorTopBarProps {
   isAIGenerating: boolean;
   allChapters: ChapterInfo[];
   currentChapterId: number;
+  focusMode: boolean;
+  onToggleFocusMode: () => void;
 }
 
 function TopBarButton({
@@ -90,6 +94,8 @@ export default function EditorTopBar({
   isAIGenerating,
   allChapters,
   currentChapterId,
+  focusMode,
+  onToggleFocusMode,
 }: EditorTopBarProps) {
   const t = useTranslations("editor");
   const tt = useTranslations("editor.toolbar");
@@ -122,6 +128,35 @@ export default function EditorTopBar({
   if (!editor) return null;
 
   const iconSize = "h-5 w-5";
+
+  if (focusMode) {
+    return (
+      <div className="fixed top-4 right-4 z-50 flex items-center gap-2 opacity-0 hover:opacity-100 transition-opacity duration-300">
+        <div className="flex items-center gap-1.5 text-sm text-muted-foreground bg-background/80 backdrop-blur-sm rounded-lg px-3 py-1.5 border border-border/40">
+          {saveStatus === "saving" ? (
+            <>
+              <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse inline-block" />
+              <span>{t("saving")}</span>
+            </>
+          ) : saveStatus === "synced" ? (
+            <>
+              <span className="h-2 w-2 rounded-full bg-emerald-400 inline-block" />
+              <span>{t("saved")}</span>
+            </>
+          ) : null}
+          <span className="mx-1">·</span>
+          <span>{t("words", { count: wordCount })}</span>
+        </div>
+        <button
+          onClick={onToggleFocusMode}
+          title={t("exitFocusMode")}
+          className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent bg-background/80 backdrop-blur-sm border border-border/40 transition-colors"
+        >
+          <Cross2Icon className={iconSize} />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="sticky top-0 z-10 flex items-center gap-1 bg-background border-b border-border/40 px-3 py-2 overflow-x-auto overflow-y-hidden opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity duration-300">
@@ -280,6 +315,10 @@ export default function EditorTopBar({
 
         <TopBarButton onClick={onHelpOpen} title={tt("help")}>
           <QuestionMarkCircledIcon className={iconSize} />
+        </TopBarButton>
+
+        <TopBarButton onClick={onToggleFocusMode} title={t("focusMode")}>
+          <EyeNoneIcon className={iconSize} />
         </TopBarButton>
 
         <TopBarButton onClick={toggleFullscreen} title={tt("fullscreen")}>

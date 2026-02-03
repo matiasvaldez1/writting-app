@@ -5,6 +5,7 @@ import {
   BooksTable,
   ChaptersTable,
   UserAnalyticsTable,
+  UsersTable,
 } from "@/drizzle/schema";
 import type { booksZodType } from "@/types/types";
 
@@ -28,7 +29,13 @@ export async function verifyBookOwnership({
   return book;
 }
 
-export async function createBook({ values }: { values: booksZodType }) {
+export async function createBook({
+  values,
+  initialDocuments,
+}: {
+  values: booksZodType;
+  initialDocuments?: { title: string; description: string; content: string }[];
+}) {
   const { userId, bookDescription, bookName, amountOfChapters } = values;
 
   return await db.transaction(async (tx) => {
@@ -37,14 +44,25 @@ export async function createBook({ values }: { values: booksZodType }) {
       .values({ userId, bookDescription, bookName, amountOfChapters })
       .returning();
 
-    const chapterCount = amountOfChapters || 1;
-    const chapterValues = Array.from({ length: chapterCount }, (_, i) => ({
-      bookId: bookAdded.id,
-      chapterNumber: i + 1,
-      chapterTitle: `Chapter ${i + 1}`,
-      chapterText: "",
-      chapterDescription: `Chapter ${i + 1} Description`,
-    }));
+    let chapterValues;
+    if (initialDocuments && initialDocuments.length > 0) {
+      chapterValues = initialDocuments.map((doc, i) => ({
+        bookId: bookAdded.id,
+        chapterNumber: i + 1,
+        chapterTitle: doc.title,
+        chapterText: doc.content,
+        chapterDescription: doc.description,
+      }));
+    } else {
+      const chapterCount = amountOfChapters || 1;
+      chapterValues = Array.from({ length: chapterCount }, (_, i) => ({
+        bookId: bookAdded.id,
+        chapterNumber: i + 1,
+        chapterTitle: `Document ${i + 1}`,
+        chapterText: "",
+        chapterDescription: `Document ${i + 1}`,
+      }));
+    }
 
     await tx.insert(ChaptersTable).values(chapterValues);
 
@@ -128,6 +146,8 @@ export async function getBookAndChapters({
       bookName: BooksTable.bookName,
       bookDescription: BooksTable.bookDescription,
       amountOfChapters: BooksTable.amountOfChapters,
+      isPublic: BooksTable.isPublic,
+      publicSlug: BooksTable.publicSlug,
       createdAt: BooksTable.createdAt,
     })
     .from(BooksTable)
@@ -461,4 +481,122 @@ export async function getUserAnalytics({ userId }: { userId: number }) {
     .where(eq(UserAnalyticsTable.userId, userId));
 
   return analytics;
+}
+
+export async function recordWordCount({
+  userId,
+  wordsDelta,
+}: {
+  userId: number;
+  wordsDelta: number;
+}) {
+  if (wordsDelta <= 0) return null;
+  const [record] = await db
+    .insert(UserAnalyticsTable)
+    .values({
+      userId,
+      type: AnalyticsTypeEnum.enumValues[2],
+      value: wordsDelta,
+    })
+    .returning();
+  return record;
+}
+
+export async function updateDailyWordGoal({
+  userId,
+  goal,
+}: {
+  userId: number;
+  goal: number;
+}) {
+  const [updated] = await db
+    .update(UsersTable)
+    .set({ dailyWordGoal: goal })
+    .where(eq(UsersTable.id, userId))
+    .returning();
+  return updated;
+}
+
+export async function getDailyWordGoal({ userId }: { userId: number }) {
+  const [user] = await db
+    .select({ dailyWordGoal: UsersTable.dailyWordGoal })
+    .from(UsersTable)
+    .where(eq(UsersTable.id, userId));
+  return user?.dailyWordGoal ?? 0;
+}
+
+function generateSlug(name: string): string {
+  const base = name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40);
+  const suffix = Math.random().toString(36).slice(2, 8);
+  return `${base}-${suffix}`;
+}
+
+export async function toggleBookPublic({
+  bookId,
+  userId,
+}: {
+  bookId: number;
+  userId: number;
+}) {
+  await verifyBookOwnership({ bookId, userId });
+
+  const [book] = await db
+    .select({
+      isPublic: BooksTable.isPublic,
+      publicSlug: BooksTable.publicSlug,
+      bookName: BooksTable.bookName,
+    })
+    .from(BooksTable)
+    .where(eq(BooksTable.id, bookId));
+
+  const newIsPublic = !book.isPublic;
+  const slug =
+    newIsPublic && !book.publicSlug
+      ? generateSlug(book.bookName)
+      : book.publicSlug;
+
+  const [updated] = await db
+    .update(BooksTable)
+    .set({ isPublic: newIsPublic, publicSlug: slug })
+    .where(eq(BooksTable.id, bookId))
+    .returning();
+
+  return updated;
+}
+
+export async function getBookBySlug({ slug }: { slug: string }) {
+  const [book] = await db
+    .select({
+      id: BooksTable.id,
+      bookName: BooksTable.bookName,
+      bookDescription: BooksTable.bookDescription,
+      isPublic: BooksTable.isPublic,
+      publicSlug: BooksTable.publicSlug,
+      createdAt: BooksTable.createdAt,
+      authorName: UsersTable.name,
+    })
+    .from(BooksTable)
+    .innerJoin(UsersTable, eq(BooksTable.userId, UsersTable.id))
+    .where(and(eq(BooksTable.publicSlug, slug), eq(BooksTable.isPublic, true)));
+
+  if (!book) return null;
+
+  const chapters = await db
+    .select({
+      id: ChaptersTable.id,
+      chapterNumber: ChaptersTable.chapterNumber,
+      chapterTitle: ChaptersTable.chapterTitle,
+      chapterText: ChaptersTable.chapterText,
+    })
+    .from(ChaptersTable)
+    .where(eq(ChaptersTable.bookId, book.id))
+    .orderBy(ChaptersTable.chapterNumber);
+
+  return { ...book, chapters };
 }

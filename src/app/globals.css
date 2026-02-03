@@ -132,6 +132,16 @@ body {
   margin: 1.5rem 0;
 }
 
+.focus-mode .ProseMirror > *:not(.has-focus) {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+}
+
+.focus-mode .ProseMirror > .has-focus {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
 .page-break-widget {
   position: relative;
   height: 40px;

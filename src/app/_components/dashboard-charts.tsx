@@ -19,7 +19,7 @@ export function SessionDurationChart({
     id: number;
     userId: number;
     createdAt: Date;
-    type: "sessionDuration" | "pageView";
+    type: string;
     value: number;
   }[];
 }) {

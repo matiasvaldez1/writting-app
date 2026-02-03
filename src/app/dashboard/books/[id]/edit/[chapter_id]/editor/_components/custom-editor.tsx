@@ -11,11 +11,14 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
+import Focus from "@tiptap/extension-focus";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 import { HelpDialog } from "@/components/help-dialog";
 import {
   addWritingSession,
+  recordWordCountAction,
   updateChapterTextContent,
 } from "@/app/_actions/books";
 import {
@@ -58,6 +61,7 @@ export default function CustomTextEditor({
 }) {
   const t = useTranslations("editor");
   const [helpOpen, setHelpOpen] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
   const { startTracking } = useWritingSession(async (duration) => {
     await addWritingSession(duration, bookId, chapterId);
   });
@@ -68,6 +72,7 @@ export default function CustomTextEditor({
   const prevGeneratingRef = useRef(false);
   const editorRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastWordCountRef = useRef<number | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("synced");
   const [, startTransition] = useTransition();
   const editorInstanceRef = useRef<ReturnType<typeof useEditor>>(null);
@@ -90,6 +95,15 @@ export default function CustomTextEditor({
       await updateChapterTextContent(bookId, chapterId, html);
       await markDraftSynced(bookId, chapterId);
       setSaveStatus("synced");
+
+      const currentWords = ed.storage.characterCount?.words() ?? 0;
+      if (lastWordCountRef.current !== null) {
+        const delta = currentWords - lastWordCountRef.current;
+        if (delta > 0) {
+          recordWordCountAction(delta);
+        }
+      }
+      lastWordCountRef.current = currentWords;
     } catch {
       setSaveStatus("local");
     }
@@ -128,6 +142,10 @@ export default function CustomTextEditor({
       }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
+      }),
+      Focus.configure({
+        className: "has-focus",
+        mode: "deepest",
       }),
       PageBreaks,
     ],
@@ -198,6 +216,9 @@ export default function CustomTextEditor({
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         saveNow();
       }
+      if (e.key === "Escape") {
+        setFocusMode(false);
+      }
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === " ") {
         e.preventDefault();
         const ed = editorInstanceRef.current;
@@ -228,7 +249,10 @@ export default function CustomTextEditor({
   const textContent = editor?.state.doc.textContent ?? "";
 
   return (
-    <div ref={editorRef} className="bg-background min-h-svh">
+    <div
+      ref={editorRef}
+      className={cn("bg-background min-h-svh", focusMode && "focus-mode")}
+    >
       <EditorTopBar
         saveStatus={saveStatus}
         onRetry={saveNow}
@@ -245,6 +269,8 @@ export default function CustomTextEditor({
         isAIGenerating={isGenerating}
         allChapters={allChapters}
         currentChapterId={chapterId}
+        focusMode={focusMode}
+        onToggleFocusMode={() => setFocusMode((prev) => !prev)}
       />
       {editor && <BubbleMenuBar editor={editor} />}
       {editor && (

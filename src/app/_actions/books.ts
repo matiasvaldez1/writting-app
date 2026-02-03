@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import z from "zod";
 import { getUserAnalytics } from "@/data-access/books";
 import { booksZodSchema } from "@/types/zodSchemas";
+import { templates } from "@/lib/templates";
 import {
   addChapterUseCase,
   addWritingSessionUseCase,
@@ -11,13 +12,17 @@ import {
   deleteBookUseCase,
   deleteChapterUseCase,
   getAllUserChapterTextsUseCase,
+  getDailyWordGoalUseCase,
   getUserBookAndChapterUseCase,
   getUserBookAndChaptersUseCase,
   getUserBooksUseCase,
+  recordWordCountUseCase,
+  toggleBookPublicUseCase,
   updateBookMetadataUseCase,
   updateChapterDescriptionUseCase,
   updateChapterTextContentUseCase,
   updateChapterTitleUseCase,
+  updateDailyWordGoalUseCase,
 } from "@/use-cases/books";
 import { getUserByClerkIdUseCase } from "@/use-cases/user";
 
@@ -35,12 +40,20 @@ export async function createBookAction(param: unknown, formData: FormData) {
 
   const user = await getUserByClerkIdUseCase();
   const data = result.data;
+  const templateId = formData.get("templateId") as string | null;
+  const template = templateId
+    ? templates.find((t) => t.id === templateId)
+    : null;
+
   await createBookUseCase({
     values: {
       ...data,
       userId: user.id,
-      amountOfChapters: Number(data.amountOfChapters ?? 0),
+      amountOfChapters: template
+        ? template.documents.length
+        : Number(data.amountOfChapters ?? 0),
     },
+    initialDocuments: template?.documents,
   });
   revalidatePath("/dashboard/books");
   return { status: "success" };
@@ -199,4 +212,34 @@ export async function updateBookMetadataAction(
   revalidatePath(`/dashboard/books/${bookId}/edit`);
   revalidatePath("/dashboard/books");
   return { status: "success", book: updated };
+}
+
+export async function recordWordCountAction(wordsDelta: number) {
+  const user = await getUserByClerkIdUseCase();
+  await recordWordCountUseCase({ userId: user.id, wordsDelta });
+  return { status: "success" };
+}
+
+export async function updateDailyWordGoalAction(goal: number) {
+  const user = await getUserByClerkIdUseCase();
+  await updateDailyWordGoalUseCase({ userId: user.id, goal });
+  revalidatePath("/dashboard");
+  return { status: "success" };
+}
+
+export async function getDailyWordGoalAction() {
+  const user = await getUserByClerkIdUseCase();
+  const goal = await getDailyWordGoalUseCase({ userId: user.id });
+  return { status: "success", goal };
+}
+
+export async function toggleBookPublicAction(bookId: number) {
+  const user = await getUserByClerkIdUseCase();
+  const updated = await toggleBookPublicUseCase({ bookId, userId: user.id });
+  revalidatePath(`/dashboard/books/${bookId}/edit`);
+  return {
+    status: "success",
+    isPublic: updated.isPublic,
+    publicSlug: updated.publicSlug,
+  };
 }

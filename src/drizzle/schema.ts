@@ -7,11 +7,13 @@ import {
   uniqueIndex,
   index,
   pgEnum,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const AnalyticsTypeEnum = pgEnum("analytics_type", [
   "sessionDuration",
   "pageView",
+  "wordCount",
 ]);
 
 export const UsersTable = pgTable(
@@ -21,6 +23,7 @@ export const UsersTable = pgTable(
     clerkId: text("clerkId").notNull().unique(),
     name: text("name").notNull(),
     email: text("email").notNull(),
+    dailyWordGoal: integer("dailyWordGoal").default(0).notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
   },
   (users) => {
@@ -41,6 +44,8 @@ export const BooksTable = pgTable(
     bookName: text("bookName").notNull(),
     bookDescription: text("bookDescription").notNull(),
     amountOfChapters: integer("amountOfChapters"),
+    isPublic: boolean("isPublic").default(false).notNull(),
+    publicSlug: text("publicSlug").unique(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
   },
   (books) => {

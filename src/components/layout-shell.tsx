@@ -13,8 +13,9 @@ export default function LayoutShell({
 }) {
   const pathname = usePathname();
   const isEditor = pathname.includes("/editor");
+  const isReadPage = pathname.startsWith("/read");
 
-  if (isEditor) {
+  if (isEditor || isReadPage) {
     return <main className="min-h-svh">{children}</main>;
   }
 
